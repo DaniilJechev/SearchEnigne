@@ -5,24 +5,21 @@
 #include <stdexcept>
 
 #include "nlohmann/json.hpp"
-#include "ConverterJSON.h"
+#include "globals.h"
 
-namespace fs = std::filesystem;
-
-void checkConfig(const fs::path& dir) {
-    std::ifstream file(dir.string() + "config.json");
-    if (!file.is_open()) {
+void checkConfig() {
+    std::ifstream config(jsonDir.string() + "config.json");
+    if (!config.is_open()) {
         throw std::runtime_error("\"config.json\" file does not exist");
     }
-    file.close();
-    ConverterJSON config(dir.string() + "config.json");
+
+    nlohmann::json data;
     try {
-        config.read();
+        config >> data;
     } catch (const std::exception &e) {
         throw std::runtime_error("\"config.json\" is empty or not in JSON format");
     }
-
-    nlohmann::json data = config.getData();
+    config.close();
 
     //check the "config" field
     if (!data.contains("config")) {
@@ -61,23 +58,23 @@ void checkConfig(const fs::path& dir) {
     }
 }
 
-void checkRequests(const fs::path& dir) {
-    std::ifstream file(dir.string() + "requests.json");
-    if (!file.is_open()) {
+void checkRequests() {
+    std::ifstream requests(jsonDir.string() + "requests.json");
+    if (!requests.is_open()) {
         throw std::runtime_error("file \"requests.json\" is not exist");
-    } else if (file.eof()) {
+    } else if (requests.eof()) {
         throw std::runtime_error("file is empty");
     }
-    file.close();
 
-    ConverterJSON request(dir.string() + "requests.json");
+    nlohmann::json queries;
     try {
-        request.read();
+        requests >> queries;
     } catch (const std::exception &e) {
         throw std::runtime_error("\"requests.json\" is empty or not in JSON format");
     }
+    requests.close();
 
-    nlohmann::json queries = request.getData();
+
     if (!queries.contains("requests")) {
         throw std::runtime_error(R"(field "requests" in "requests.json" is not exist)");
     } else if (!queries["requests"].is_array()) {
@@ -116,8 +113,8 @@ void checkRequests(const fs::path& dir) {
     }
 }
 
-void checkAnswers(const fs::path& dir) {
-    std::ofstream file(dir.string() + "answers.json");
-    file << "Hello";
-    file.close();
+void checkAnswers() {
+    std::ofstream answers(jsonDir.string() + "answers.json");
+    answers.clear();
+    answers.close();
 }

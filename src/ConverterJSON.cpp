@@ -1,65 +1,48 @@
 #include "ConverterJson.h"
-#include <utility>
 
-ConverterJSON::~ConverterJSON() {
-    m_writer.close();
-    m_reader.close();
-}
+#include <fstream>
+#include <vector>
+#include <string>
+#include <iostream>
+#include <filesystem>
 
-ConverterJSON::ConverterJSON(std::string path): m_path(path){}
+#include "nlohmann/json.hpp"
+#include "globals.h"
 
-ConverterJSON::ConverterJSON(const ConverterJSON &other) :
-        ConverterJSON(other.getPath()) {
-    m_data = other.m_data;
-}
 
-ConverterJSON &ConverterJSON::operator=(const ConverterJSON &other) {
-    if (this != &other) {
-        setPath(other.getPath());
-        m_data = other.m_data;
+std::vector<std::string> ConverterJSON::getTextDocuments() {
+    std::vector<std::string> textDocuments;
+    nlohmann::json configData;
+    std::ifstream config(jsonDir.string() + "config.json");
+
+    config >> configData; //ERROR
+    for (const auto &it : configData["files"]) {
+        fs::path path = jsonDir / it;
+        std::ifstream file(path);
+        if (!file.is_open()) {
+            std::cerr << "File \"" + path.filename().string() + "\" is not found" << std::endl;
+            continue;
+        }
+        std::string fileText, line;
+        while (std::getline(file, line)) {
+            fileText.append(line);
+        }
+        file.close();
+        textDocuments.push_back(fileText);
     }
-    return *this;
+    return textDocuments;
 }
 
-ConverterJSON::ConverterJSON(ConverterJSON &&other) noexcept{
-    m_path = std::move(other.m_path);
-    m_data = std::move(other.m_data);
+int ConverterJSON::getResponsesLimit() {
+    nlohmann::json  configData;
+    std::ifstream config (jsonDir.string() + "config.json");
+    config >> configData;
+    return configData["config"]["max_responses"];
 }
 
-ConverterJSON &ConverterJSON::operator=(ConverterJSON &&other) noexcept {
-    if (this != &other) {
-        m_path = std::move(other.m_path);
-        m_data = std::move(other.m_data);
-    }
-    return *this;
-}
-
-
-void ConverterJSON::setPath(const std::string &path) {
-    m_path = path;
-}
-
-void ConverterJSON::setData(const nlohmann::json &mData) {
-    m_data = mData;
-}
-
-std::string ConverterJSON::getPath() const {
-    return m_path;
-}
-
-const nlohmann::json &ConverterJSON::getData() const {
-    return m_data;
-}
-
-
-void ConverterJSON::read() {
-    m_reader.open(m_path);
-    m_reader >> m_data;
-    m_reader.close();
-}
-
-void ConverterJSON::write() {
-    m_writer.open(m_path);
-    m_writer << m_data.dump(4);
-    m_writer.close();
+std::vector<std::string> ConverterJSON::getRequests() {
+    nlohmann::json  requestsData;
+    std::ifstream requests (jsonDir.string() + "requests.json");
+    requests >> requestsData;
+    return requestsData["requests"];
 }

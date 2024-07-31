@@ -4,16 +4,13 @@ add_executable(main main.cpp)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(LIBRARIES
-        ConverterJSON
-        JsonGuard
-        nlohmann_json::nlohmann_json
-)
-
 include(FetchContent)
 FetchContent_Declare(json URL https://github.com/nlohmann/json/releases/download/v3.11.3/json.tar.xz)
 FetchContent_MakeAvailable(json)
 
-foreach (LIBRARY IN LISTS LIBRARIES)
-    target_link_libraries(main PRIVATE ${LIBRARY})
-endforeach ()
+target_link_libraries(main PRIVATE
+        ConverterJSON
+        JsonGuard
+        globals
+        nlohmann_json::nlohmann_json
+)
