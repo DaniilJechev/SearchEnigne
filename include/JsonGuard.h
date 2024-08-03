@@ -1,7 +1,4 @@
-#ifndef SEARCHENGINE_JSONGUARD_H
-#define SEARCHENGINE_JSONGUARD_H
-
-#endif //SEARCHENGINE_JSONGUARD_H
+#pragma once
 
 void checkConfig();
 void checkRequests();

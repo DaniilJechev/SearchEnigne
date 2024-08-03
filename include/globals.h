@@ -1,9 +1,9 @@
-#ifndef SEARCHENGINE_GLOBALS_H
-#define SEARCHENGINE_GLOBALS_H
-
-#endif //SEARCHENGINE_GLOBALS_H
+#pragma once
 
 #include <filesystem>
 
 namespace fs = std::filesystem;
 extern const fs::path jsonDir;
+extern const fs::path rootDir;
+extern const fs::path testsDir;
+extern const fs::path testJsonDir;

@@ -1,6 +1,8 @@
 set(TARGETS
         ConverterJSON
         JsonGuard
+        InvertedIndex
+        SearchServer
         globals
 )
 
@@ -13,7 +15,8 @@ foreach (TARGET IN LISTS TARGETS)
             CXX_STANDARD 17
             CXX_STANDARD_REQUIRED ON
     )
-    if(NOT(${TARGET} STREQUAL globals))
+    # SearchServer and globals don't need the "globals" library
+    if(NOT(${TARGET} STREQUAL globals) AND NOT(${TARGET} STREQUAL SearchServer))
         target_link_libraries(${TARGET} PRIVATE globals)
     endif ()
 endforeach ()
@@ -24,3 +27,4 @@ FetchContent_MakeAvailable(json)
 
 target_link_libraries(ConverterJSON PRIVATE nlohmann_json::nlohmann_json)
 target_link_libraries(JsonGuard PRIVATE nlohmann_json::nlohmann_json)
+target_link_libraries(SearchServer PRIVATE InvertedIndex)
