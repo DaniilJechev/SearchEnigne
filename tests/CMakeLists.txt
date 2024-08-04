@@ -31,3 +31,4 @@ endfunction()
 
 add_test(ConverterJSONTest ConverterJSON)
 add_test(InvertedIndexTest InvertedIndex ConverterJSON)
+add_test(SearchServerTest SearchServer)
