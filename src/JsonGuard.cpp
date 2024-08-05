@@ -50,7 +50,7 @@ void checkConfig() {
     } else if (!data.at("files").is_array()) {
         throw std::runtime_error(R"(field "files" in "config.json" must keep array elements)");
     }
-    for (const auto &it : data["files"]) {
+    for (const auto &it: data["files"]) {
         if (!it.is_string()) {
             throw std::runtime_error("path in \"config.json\" can't be a non-string value. "
                                      "\nError path: " + to_string(it));
@@ -82,7 +82,7 @@ void checkRequests() {
     }
 
     int queryCnt = 0;
-    for (const auto & it : queries["requests"]) {
+    for (const auto &it: queries["requests"]) {
         if (!it.is_string()) {
             throw std::runtime_error("query in \"requests.json\" can't be a non-string value. "
                                      "\nWrong query: " + to_string(it));
@@ -92,7 +92,7 @@ void checkRequests() {
         std::string query = it, word;
         std::stringstream stream(query);
         while (stream >> word) {
-            for (char i : word) {
+            for (char i: word) {
                 if (i < 'a' or i > 'z') {
                     throw std::runtime_error("query in \"requests.json\" must contain only lowercase letters. "
                                              "\nWrong query: " + query);

@@ -1,7 +1,6 @@
 #include "ConverterJson.h"
 
 #include <fstream>
-#include <utility>
 #include <vector>
 #include <string>
 #include <iostream>
@@ -12,13 +11,13 @@
 
 namespace fs = std::filesystem;
 
-std::vector<std::string> ConverterJSON::getTextDocuments(const fs::path& jsonDir) {
+std::vector<std::string> ConverterJSON::getTextDocuments(const fs::path &jsonDir) {
     std::vector<std::string> textDocuments;
     nlohmann::json configData;
     std::ifstream config(jsonDir.string() + "config.json");
 
     config >> configData; //read all paths
-    for (const auto &toFile : configData["files"]) {
+    for (const auto &toFile: configData["files"]) {
         fs::path path = jsonDir / toFile;
         std::ifstream file(path);
         if (!file.is_open()) {
@@ -40,20 +39,20 @@ std::vector<std::string> ConverterJSON::getTextDocuments(const fs::path& jsonDir
     return textDocuments;
 }
 
-int ConverterJSON::getResponsesLimit(const fs::path& jsonDir) {
+int ConverterJSON::getResponsesLimit(const fs::path &jsonDir) {
     nlohmann::json configData;
-    std::ifstream config (jsonDir.string() + "config.json");
+    std::ifstream config(jsonDir.string() + "config.json");
     config >> configData;
     return configData["config"]["max_responses"];
 }
 
-std::vector<std::string> ConverterJSON::getRequests(const fs::path& jsonDir) {
+std::vector<std::string> ConverterJSON::getRequests(const fs::path &jsonDir) {
     nlohmann::json data;
     std::vector<std::string> requests;
-    std::ifstream file (jsonDir.string() + "requests.json");
+    std::ifstream file(jsonDir.string() + "requests.json");
     file >> data;
 
-    for (const auto &it : data["requests"]) {
+    for (const auto &it: data["requests"]) {
         std::string query = it;
         requests.push_back(query);
     }
@@ -71,16 +70,19 @@ std::string createRequestName(int requestId) {
     return requestName;
 }
 
-void ConverterJSON::putAnswers(const std::vector<std::vector<RelativeIndex>>& relativeIndexes, const fs::path &jsonDir) {
+void
+ConverterJSON::putAnswers(const std::vector<std::vector<RelativeIndex>> &relativeIndexes,
+                          const fs::path &jsonDir) {
     nlohmann::json answerData;
     std::ofstream answers(jsonDir.string() + "answers.json");
     int requestId = 0;
-    
-    for (const auto &it : relativeIndexes) {
+
+    for (const auto &it: relativeIndexes) {
         std::string requestName = createRequestName(requestId);
         answerData[requestName]["result"] = !it.empty();
-        for (const auto &it2 : it) {
-            answerData[requestName]["relevance"].push_back({{"docId", it2.m_docId}, {"rank", it2.m_rank}});
+        for (const auto &it2: it) {
+            answerData[requestName]["relevance"].push_back({{"docId", it2.m_docId},
+                                                            {"rank",  it2.m_rank}});
         }
         ++requestId;
     }
