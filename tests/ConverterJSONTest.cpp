@@ -12,10 +12,8 @@ TEST(ConverterJSON, getResponsesLimit) {
 TEST(ConverterJSON, getRequests) {
     auto requests = ConverterJSON::getRequests(testJsonDir);
     ASSERT_EQ(requests.size(), 2);
-    EXPECT_STREQ(requests[0].m_request.c_str(), "Hello world");
-    EXPECT_EQ(requests[0].m_id, 1);
-    EXPECT_STREQ(requests[1].m_request.c_str(), "How to cook");
-    EXPECT_EQ(requests[1].m_id, 2);
+    EXPECT_STREQ(requests[0].c_str(), "Hello world");
+    EXPECT_STREQ(requests[1].c_str(), "How to cook");
 }
 
 TEST(ConverterJSON, getTextDocuments) {
