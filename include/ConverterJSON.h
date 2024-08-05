@@ -4,14 +4,9 @@
 #include <string>
 #include <filesystem>
 
+#include "SearchServer.h"
+
 namespace fs = std::filesystem;
-
-struct Request {
-    size_t m_id;
-    std::string m_request;
-
-    Request (size_t id, std::string request);
-};
 
 class ConverterJSON {
 public:
@@ -19,6 +14,6 @@ public:
 
     static std::vector<std::string> getTextDocuments(const fs::path& jsonDir);
     static int getResponsesLimit(const fs::path& jsonDir);
-    static std::vector<Request> getRequests(const fs::path& jsonDir);
-    static void putAnswers(std::vector<std::vector<std::pair<int, float>>>, const fs::path& jsonDir); // implement later
+    static std::vector<std::string> getRequests(const fs::path& jsonDir);
+    static void putAnswers(const std::vector<std::vector<RelativeIndex>> &relativeIndexes, const fs::path &jsonDir);
 };

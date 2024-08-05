@@ -16,13 +16,14 @@ struct RelativeIndex {
 };
 
 class SearchServer {
+private:
+    static void addIndex(std::vector<RelativeIndex> &docRelativeIdx, const Entry &newIdx);
+    static void convertAbsToRelative(std::vector<RelativeIndex> &docRelativeIdx); //array must be sorted
+
 public:
-    explicit SearchServer(InvertedIndex& freqDict) : m_freqDict(freqDict){};
-    std::vector<std::vector<RelativeIndex>> search(const
-                std::vector<std::string>& queries_input);
-    static void addIndex (std::vector<RelativeIndex>& docRelativeIdx, const Entry& newIdx);
-    static void convertAbsToRelative(std::vector<RelativeIndex>& docRelativeIdx); //array must be sorted
+    explicit SearchServer(InvertedIndex &freqDict) : m_freqDict(freqDict) {};
+    std::vector<std::vector<RelativeIndex>> search(const std::vector<std::string> &queries_input);
 
 private:
-    InvertedIndex& m_freqDict;
+    InvertedIndex &m_freqDict;
 };

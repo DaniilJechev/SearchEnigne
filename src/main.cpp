@@ -10,11 +10,16 @@
 int main() {
     try {
         checkConfig();
-        checkAnswers();
         checkRequests();
+        checkAnswers();
     } catch (const std::exception &e) {
         std::cerr << e.what();
         return -1;
     }
 
+    InvertedIndex index;
+    index.UpdateDocumentBase(ConverterJSON::getTextDocuments(jsonDir));
+    SearchServer server(index);
+    auto answers = server.search(ConverterJSON::getRequests(jsonDir));
+    ConverterJSON::putAnswers(answers, jsonDir);
 }

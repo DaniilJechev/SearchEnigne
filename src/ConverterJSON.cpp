@@ -8,11 +8,9 @@
 #include <filesystem>
 
 #include "nlohmann/json.hpp"
+#include "SearchServer.h"
 
 namespace fs = std::filesystem;
-
-Request::Request (size_t id, std::string request):
-        m_id(id), m_request(std::move(request)) {}
 
 std::vector<std::string> ConverterJSON::getTextDocuments(const fs::path& jsonDir) {
     std::vector<std::string> textDocuments;
@@ -49,20 +47,43 @@ int ConverterJSON::getResponsesLimit(const fs::path& jsonDir) {
     return configData["config"]["max_responses"];
 }
 
-std::vector<Request> ConverterJSON::getRequests(const fs::path& jsonDir) {
+std::vector<std::string> ConverterJSON::getRequests(const fs::path& jsonDir) {
     nlohmann::json data;
-    std::vector<Request> requests;
+    std::vector<std::string> requests;
     std::ifstream file (jsonDir.string() + "requests.json");
     file >> data;
 
     for (const auto &it : data["requests"]) {
         std::string query = it;
-        if (requests.empty()) {
-            requests.emplace_back(1, query);
-            continue;
-        }
-        requests.emplace_back(requests.back().m_id + 1, query);
+        requests.push_back(query);
     }
 
     return requests;
+}
+
+std::string createRequestName(int requestId) {
+    std::string requestName = "request";
+    if (requestId / 10 == 0) {
+        requestName += "00" + std::to_string(requestId);
+    } else if (requestId / 100 == 0) {
+        requestName += "0" + std::to_string(requestId);
+    }
+    return requestName;
+}
+
+void ConverterJSON::putAnswers(const std::vector<std::vector<RelativeIndex>>& relativeIndexes, const fs::path &jsonDir) {
+    nlohmann::json answerData;
+    std::ofstream answers(jsonDir.string() + "answers.json");
+    int requestId = 0;
+    
+    for (const auto &it : relativeIndexes) {
+        std::string requestName = createRequestName(requestId);
+        answerData[requestName]["result"] = !it.empty();
+        for (const auto &it2 : it) {
+            answerData[requestName]["relevance"].push_back({{"docId", it2.m_docId}, {"rank", it2.m_rank}});
+        }
+        ++requestId;
+    }
+    answers << answerData.dump(4);
+    answers.close();
 }

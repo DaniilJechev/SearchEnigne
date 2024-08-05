@@ -1,8 +1,7 @@
 {
   "requests": [
-    "some words",
-    "some words",
-    "some words",
-    "some words"
+    "moscow capital russia",
+    "paris is the capital of great britain",
+    "non exist query"
   ]
 }
