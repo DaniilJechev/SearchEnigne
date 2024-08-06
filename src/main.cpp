@@ -1,6 +1,5 @@
 #include <iostream>
 
-#include "nlohmann/json.hpp"
 #include "ConverterJSON.h"
 #include "InvertedIndex.h"
 #include "SearchServer.h"
@@ -9,6 +8,7 @@
 
 int main() {
     try {
+        setPaths();
         checkConfig();
         checkRequests();
         checkAnswers();

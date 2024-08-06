@@ -14,7 +14,7 @@ TEST(TestCaseSearchServer, TestSimple) {
             "americano cappuccino"
     };
     const vector <string> request = {"milk water", "sugar"};
-    const std::vector<vector < RelativeIndex>>
+    const std::vector<vector <RelativeIndex>>
     expected = {
             {
                     {2, 1},
