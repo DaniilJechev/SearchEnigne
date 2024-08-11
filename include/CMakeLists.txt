@@ -1,3 +1,5 @@
+find_package(Qt6 COMPONENTS Core REQUIRED)
+
 set(TARGETS
         ConverterJSON
         JsonGuard
@@ -6,9 +8,13 @@ set(TARGETS
         globals
 )
 
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
+
 foreach (TARGET IN LISTS TARGETS)
     add_library(${TARGET} STATIC
-            ${CMAKE_SOURCE_DIR}/src/${TARGET}.cpp)
+            ${CMAKE_SOURCE_DIR}/src/cpp/${TARGET}.cpp)
 
     set_target_properties(
             ${TARGET} PROPERTIES
@@ -25,6 +31,7 @@ include(FetchContent)
 FetchContent_Declare(json URL https://github.com/nlohmann/json/releases/download/v3.11.3/json.tar.xz)
 FetchContent_MakeAvailable(json)
 
-target_link_libraries(ConverterJSON PRIVATE nlohmann_json::nlohmann_json SearchServer)
+target_link_libraries(ConverterJSON PRIVATE nlohmann_json::nlohmann_json SearchServer Qt6::Core)
 target_link_libraries(JsonGuard PRIVATE nlohmann_json::nlohmann_json)
-target_link_libraries(SearchServer PRIVATE InvertedIndex)
+target_link_libraries(SearchServer PRIVATE InvertedIndex Qt6::Core)
+target_link_libraries(InvertedIndex PRIVATE Qt6::Core)

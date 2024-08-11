@@ -1,8 +1,5 @@
 #pragma once
 
-#include <vector>
-#include <string>
-
 #include "InvertedIndex.h"
 
 struct RelativeIndex {
@@ -10,7 +7,7 @@ struct RelativeIndex {
     float m_rank;
 
     bool operator==(const RelativeIndex &other) const;
-
+    RelativeIndex() = default;
     RelativeIndex(size_t docId, float rank) :
             m_docId(docId), m_rank(rank) {};
 };
@@ -22,7 +19,7 @@ private:
 
 public:
     explicit SearchServer(InvertedIndex &freqDict) : m_freqDict(freqDict) {};
-    std::vector<std::vector<RelativeIndex>> search(const std::vector<std::string> &queries_input);
+    std::vector<std::vector<RelativeIndex>> search(const std::vector<std::string> &queries_input, size_t maxResponses = 5);
 
 private:
     InvertedIndex &m_freqDict;

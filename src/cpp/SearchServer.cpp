@@ -11,7 +11,7 @@ bool RelativeIndex::operator==(const RelativeIndex &other) const {
     return (m_docId == other.m_docId && m_rank == other.m_rank);
 }
 
-std::vector<std::vector<RelativeIndex>> SearchServer::search(const std::vector<std::string> &queriesInput) {
+std::vector<std::vector<RelativeIndex>> SearchServer::search(const std::vector<std::string> &queriesInput, size_t maxResponses) {
     std::vector<std::vector<RelativeIndex>> result;
     for (const auto &query: queriesInput) {
         std::string word;
@@ -29,6 +29,11 @@ std::vector<std::vector<RelativeIndex>> SearchServer::search(const std::vector<s
                       }
                       return (first.m_rank > second.m_rank);
                   });
+        for (auto &it : docRelativeIdx) {
+            if (docRelativeIdx.size() > maxResponses) {
+                docRelativeIdx.resize(maxResponses);
+            }
+        }
         convertAbsToRelative(docRelativeIdx);
         result.push_back(std::move(docRelativeIdx));
     }

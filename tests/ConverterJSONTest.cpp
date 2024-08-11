@@ -23,4 +23,3 @@ TEST(ConverterJSON, getTextDocuments) {
     EXPECT_STREQ(texts[1].c_str(), "Hello world!"); //simpleText.txt
     EXPECT_STREQ(texts[2].c_str(), "firstLine secondLine"); //manyLines.txt
 }
-
