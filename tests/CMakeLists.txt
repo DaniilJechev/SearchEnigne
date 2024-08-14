@@ -1,34 +1,21 @@
-cmake_minimum_required(VERSION 3.10)
-project(tests)
+cmake_minimum_required (VERSION 3.8)
 
-include(FetchContent)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+
+set(SrcFiles
+        ${MY_SRC/CPP_DIR}/InvertedIndex.cpp
+        ${MY_SRC/CPP_DIR}/SearchServer.cpp
+        ${MY_SRC/CPP_DIR}/ConverterJSON.cpp
+        )
+
+set(TestsFiles
+        InvertedIndexTest.cpp
+        SearchServerTest.cpp
+        ConverterJSONTest.cpp
+        )
+
+add_executable(GtestTests ${TestsFiles} ${SrcFiles})
+target_link_libraries(GtestTests nlohmann_json::nlohmann_json GTest::gtest_main)
 include(GoogleTest)
-FetchContent_Declare(
-        googletest
-        URL
-        https://github.com/google/googletest/archive/release-1.11.0.zip
-)
-FetchContent_MakeAvailable(googletest)
-
-include_directories(${CMAKE_SOURCE_DIR}/include)
-set(gtest_disable_pthreads on)
-enable_testing()
-
-function(add_test TARGET)
-    if (NOT TARGET) #Ensure that target name in provided
-        message(FATAL_ERROR "Target name not provided to add_test function.")
-    endif()
-
-    add_executable(${TARGET} ${TARGET}.cpp)
-    target_link_libraries(${TARGET} PRIVATE gtest_main globals) #necessary libraries
-
-    foreach (LIB IN LISTS ARGN) #ARGN - list of other libraries
-        target_link_libraries(${TARGET} PRIVATE ${LIB})
-    endforeach ()
-
-    gtest_discover_tests(${TARGET})
-endfunction()
-
-add_test(ConverterJSONTest ConverterJSON)
-add_test(InvertedIndexTest InvertedIndex ConverterJSON)
-add_test(SearchServerTest SearchServer)
+target_include_directories(GtestTests PUBLIC ${MY_INCLUDE_DIR})
+gtest_discover_tests(GtestTests)

@@ -1,5 +1,4 @@
 #include <iostream>
-#include <memory>
 
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
@@ -24,7 +23,7 @@ int main(int argc, char **argv) {
     }
 
     InvertedIndex idx;
-    idx.UpdateDocumentBase(ConverterJSON::getTextDocuments(jsonDir));
+    idx.UpdateDocumentBase(ConverterJSON::getTextDocuments(jsonDir, resourcesDir));
     SearchServer server(idx);
     auto answers = server.search(ConverterJSON::getRequests(jsonDir), ConverterJSON::getResponsesLimit(jsonDir));
     ConverterJSON::putAnswers(answers, jsonDir);

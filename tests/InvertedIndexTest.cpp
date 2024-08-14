@@ -2,8 +2,6 @@
 #include <string>
 
 #include "InvertedIndex.h"
-#include "ConverterJSON.h"
-#include "globals.h"
 #include "gtest/gtest.h"
 
 using namespace std;

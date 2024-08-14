@@ -5,9 +5,9 @@
     "max_responses": 3
   },
   "files": [
-    "../testResources/empty.txt",
-    "../testResources/simpleText.txt",
-    "../testResources/manyLines.txt",
-    "../testResources/nonExistFile.txt"
+    "empty.txt",
+    "simpleText.txt",
+    "manyLines.txt",
+    "nonExistFile.txt"
   ]
 }

@@ -11,14 +11,14 @@
 
 namespace fs = std::filesystem;
 
-std::vector<std::string> ConverterJSON::getTextDocuments(const fs::path &jsonDir) {
+std::vector<std::string> ConverterJSON::getTextDocuments(const fs::path &jsonDir, const fs::path& resourcesDir) {
     std::vector<std::string> textDocuments;
     nlohmann::json configData;
     std::ifstream config(jsonDir.string() + "config.json");
 
     config >> configData; //read all paths
     for (const auto &toFile: configData["files"]) {
-        fs::path path = jsonDir / toFile;
+        fs::path path = resourcesDir / toFile;
         std::ifstream file(path);
         if (!file.is_open()) {
             std::cerr << "File \"" + path.filename().string() + "\" is not found" << std::endl;
@@ -41,6 +41,7 @@ std::vector<std::string> ConverterJSON::getTextDocuments(const fs::path &jsonDir
 
 int ConverterJSON::getResponsesLimit(const fs::path &jsonDir) {
     nlohmann::json configData;
+    std::string path = jsonDir.string();
     std::ifstream config(jsonDir.string() + "config.json");
     config >> configData;
     return configData["config"]["max_responses"];

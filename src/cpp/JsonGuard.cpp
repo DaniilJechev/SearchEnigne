@@ -31,7 +31,7 @@ void checkConfig() {
     } else if (!data["config"].at("name").is_string()) {
         throw std::runtime_error(R"(field "name" in "config.json" must contain a string)");
     } else if (!data["config"].contains("version")) {
-        throw std::runtime_error(R"(field "name" in "config.json" is not exist)");
+        throw std::runtime_error(R"(field "version" in "config.json" is not exist)");
     } else if (!data["config"].at("version").is_string()) {
         throw std::runtime_error(R"(field "version" in "config.json" must contain a string)");
     } else if (!data["config"].contains("max_responses")) {

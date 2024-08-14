@@ -1,10 +1,10 @@
 #include "globals.h"
 #include <filesystem>
 
+
 fs::path rootDir;
 fs::path jsonDir;
-fs::path testDir;
-fs::path testJsonDir;
+fs::path resourcesDir;
 fs::path mainQmlFile;
 
 void setPaths() {
@@ -13,7 +13,7 @@ void setPaths() {
         rootDir = rootDir.parent_path();
     }
     jsonDir = rootDir / "jsonFiles/";
-    testDir = rootDir / "tests/";
-    testJsonDir = testDir / "testJsonFiles/";
+    resourcesDir = rootDir / "resources/";
+
     mainQmlFile = rootDir / "src/qml/main.qml";
 }
