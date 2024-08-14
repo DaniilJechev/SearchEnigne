@@ -8,7 +8,7 @@
 #include "globals.h"
 
 void checkConfig() {
-    std::ifstream config(jsonDir.string() + "config.json");
+    std::ifstream config(global::jsonDir.string() + "config.json");
     if (!config.is_open()) {
         throw std::runtime_error("\"config.json\" file does not exist");
     }
@@ -59,7 +59,7 @@ void checkConfig() {
 }
 
 void checkRequests() {
-    std::ifstream requests(jsonDir.string() + "requests.json");
+    std::ifstream requests(global::jsonDir.string() + "requests.json");
     if (!requests.is_open()) {
         throw std::runtime_error("file \"requests.json\" is not exist");
     } else if (requests.eof()) {
@@ -114,7 +114,7 @@ void checkRequests() {
 }
 
 void checkAnswers() {
-    std::ofstream answers(jsonDir.string() + "answers.json");
+    std::ofstream answers(global::jsonDir.string() + "answers.json");
     answers.clear();
     answers.close();
 }

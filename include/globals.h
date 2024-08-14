@@ -4,9 +4,9 @@
 
 namespace fs = std::filesystem;
 
-extern fs::path rootDir;
-extern fs::path jsonDir;
-extern fs::path resourcesDir;
-extern fs::path mainQmlFile;
-
-void setPaths();
+namespace global {
+    static fs::path rootDir = fs::current_path();
+    static fs::path jsonDir = rootDir / "jsonFiles/";
+    static fs::path resourcesDir = rootDir / "resources/";
+    static fs::path mainQmlFile = rootDir / "src/qml/main.qml";
+}

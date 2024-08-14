@@ -13,7 +13,6 @@
 
 int main(int argc, char **argv) {
     try {
-        setPaths();
         checkConfig();
         checkRequests();
         checkAnswers();
@@ -23,14 +22,14 @@ int main(int argc, char **argv) {
     }
 
     InvertedIndex idx;
-    idx.UpdateDocumentBase(ConverterJSON::getTextDocuments(jsonDir, resourcesDir));
+    idx.UpdateDocumentBase(ConverterJSON::getTextDocuments(global::jsonDir, global::resourcesDir));
     SearchServer server(idx);
-    auto answers = server.search(ConverterJSON::getRequests(jsonDir), ConverterJSON::getResponsesLimit(jsonDir));
-    ConverterJSON::putAnswers(answers, jsonDir);
+    auto answers = server.search(ConverterJSON::getRequests(global::jsonDir), ConverterJSON::getResponsesLimit(global::jsonDir));
+    ConverterJSON::putAnswers(answers, global::jsonDir);
 
     QGuiApplication app(argc, argv);
     QQmlApplicationEngine engine;
-    QString mainQmlPath = QString::fromStdString(mainQmlFile.string());
+    QString mainQmlPath = QString::fromStdString(global::mainQmlFile.string());
     const QUrl url = QUrl::fromLocalFile(mainQmlPath);
     QObject::connect(
             &engine,

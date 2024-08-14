@@ -38,12 +38,11 @@ ApplicationWindow {
 
     Item {
         id: queries
-        width: parent.width
+        width: parent.width / 2 - 20
         height: parent.height / 3
         anchors {
             top: parent.top
             left: parent.left
-            right: parent.right
             margins: 10
             topMargin: 50
         }
@@ -125,10 +124,10 @@ ApplicationWindow {
                 TextInput {
                     //Layout.preferredWidth: queryList.width - queryVerticalSlider.width - myIndex.width - query.spacing //this is don't work
                     //Layout.fillWidth: false
+                    //PlaceholderText: "Enter your query"
                     height: 15
                     font.pointSize: 15
                     text: model.query
-                    //PlaceholderText: "Enter your query"
                     color: "white"
                     onTextEdited: {
                         model.query = text
@@ -168,16 +167,15 @@ ApplicationWindow {
         }
     }
 
-
     Item {
         id: files
-        width: parent.width / 2.5
-        height: parent.height / 2.5
+        width: parent.width / 2 - 20
+        height: parent.height / 3
         anchors {
-            bottom: parent.bottom
-            left: parent.left
+            top: parent.top
+            right: parent.right
             margins: 10
-            bottomMargin: 50
+            topMargin: 50
         }
 
         Rectangle {
@@ -257,10 +255,10 @@ ApplicationWindow {
                 TextInput {
                     //Layout.preferredWidth: queryList.width - queryVerticalSlider.width - myIndex.width - query.spacing //this is don't work
                     //Layout.fillWidth: false
+                    //PlaceholderText: "Enter path to your file"
                     height: 15
                     font.pointSize: 15
                     text: model.file
-                    //PlaceholderText: "Enter your query"
                     color: "white"
                     onTextEdited: {
                         model.file = text
@@ -299,7 +297,6 @@ ApplicationWindow {
             }
         }
     }
-
 
     Item {
         id: answers
@@ -387,12 +384,92 @@ ApplicationWindow {
                 }
 
                 Label {
-                    //Layout.preferredWidth: queryList.width - queryVerticalSlider.width - myIndex.width - query.spacing //this is don't work
-                    //Layout.fillWidth: false
                     height: 15
                     font.pointSize: 15
                     text: model.answer
-                    //PlaceholderText: "Enter your query"
+                    color: "white"
+                }
+            }
+        }
+    }
+
+    Item {
+        id: alerts
+        width: parent.width / 2.5
+        height: parent.height / 2.5
+        anchors {
+            bottom: parent.bottom
+            left: parent.left
+            margins: 10
+            bottomMargin: 50
+        }
+
+        Rectangle {
+            id: backGroundAlert
+            anchors.fill: parent
+            color: "#2e2d2d"
+            border {
+                color: "black"
+                width: 6
+            }
+        }
+
+        Text {
+            id: titleAlert
+            text: "Alerts"
+            color: standardTextColor
+            anchors {
+                bottom: parent.top
+                horizontalCenter: parent.horizontalCenter
+            }
+            font.pointSize: 25
+        }
+
+        ListModel {
+            id: alertList
+            ListElement {
+                alert: "file <filename> is not found"
+            }
+
+            ListElement {
+                alert: "the \"name\" field in \"config.json\" is not exist"
+            }
+
+            ListElement {
+                alert: "..."
+            }
+        }
+
+        ListView {
+            id: alertView
+            model: alertList
+            height: parent.height - backGroundAlert.border.width * 4
+            width: parent.width - backGroundAlert.border.width * 4
+            spacing: 10
+            clip: true
+            anchors {
+                left: parent.left
+                top: parent.top
+                margins: 10
+            }
+
+            ScrollBar.vertical: ScrollBar {
+                id: alertVerticalSlider
+                anchors {
+                    right: answerList.right
+                    top: answerList.top
+                }
+                width: 15
+            }
+
+            delegate: RowLayout {
+                id: alert
+                spacing: 10
+
+                Label {
+                    height: 15
+                    font.pointSize: 15
+                    text: model.alert
                     color: "white"
                 }
             }
