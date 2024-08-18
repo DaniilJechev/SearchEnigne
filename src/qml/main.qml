@@ -34,299 +34,37 @@ ApplicationWindow {
         }
     }
 
-    Item {
+    MyWindow {
         id: queries
-        width: parent.width / 2 - 20
-        height: parent.height / 3
-        anchors {
-            top: parent.top
-            left: parent.left
-            margins: 10
-            topMargin: 50
-        }
+        anchors.left: parent.left
+        anchors.margins:10
+        anchors.top: parent.top
+        anchors.topMargin: 50
 
-        Rectangle {
-            id: backGroundQueries
-            anchors.fill: parent
-            color: "#2e2d2d"
-            border {
-                color: "black"
-                width: 6
-            }
-        }
+        title: "Queries"
+        placeHolderText: "Enter new query"
 
-        Text {
-            id: titleQueies
-            text: "Queries"
-            color: standardTextColor
-            anchors {
-                bottom: parent.top
-                horizontalCenter: parent.horizontalCenter
-            }
-            font.pointSize: 25
-        }
-
-        ListModel {
-            id: queryList
-            ListElement {
-                query: "banana"
-            }
-
-            ListElement {
-                query: "apple"
-            }
-
-            ListElement {
-                query: "banana"
-            }
-
-            ListElement {
-                query: "apple"
-            }
-        }
-
-        ListView {
-            id: queryView
-            model: queryList
-            height: parent.height - backGroundQueries.border.width * 4
-            width: parent.width - backGroundQueries.border.width * 4
-            spacing: 10
-            clip: true
-            anchors {
-                left: parent.left
-                top: parent.top
-                margins: 10
-            }
-
-            ScrollBar.vertical: ScrollBar {
-                id: queryVerticalSlider
-                anchors {
-                    right: queryList.right
-                    top: queryList.top
-                }
-                width: 15
-            }
-
-            delegate: RowLayout {
-                id: query
-                spacing: 10
-
-
-                Label {
-                    id: queryIndex
-                    text: index + 1 + "."
-                    color: "white"
-                    font.pointSize: 15
-                }
-
-                TextInput {
-                    //Layout.preferredWidth: queryList.width - queryVerticalSlider.width - myIndex.width - query.spacing //this is don't work
-                    //Layout.fillWidth: false
-                    //PlaceholderText: "Enter your query"
-                    height: 15
-                    font.pointSize: 15
-                    text: model.query
-                    color: "white"
-                    onTextEdited: {
-                        model.query = text
-                    }
-                }
-
-                MyButton { // delete query button
-                    width: 40
-                    height: 25
-                    buttonText: "-"
-                    fontPointSize: 15
-                    staticButtonColor: "black"
-
-                    onClickedFoo: {
-                        queryList.remove(index);
-                    }
-                }
-            }
-        }
-
-        MyButton { // add new query button
-            id: addNewQuery
-            width: 100
-            height: 30
-            buttonText: "+"
-            fontPointSize: 20
-
-            anchors {
-                left: parent.left
-                top: parent.bottom
-                topMargin: 5
-            }
-
-            onClickedFoo: {
-                queryList.append({query: "Enter your query"});
-                queryView.positionViewAtIndex(queryList.count - 1, queryView.End);
-            }
-        }
-
-        MyButton {
-            id: clearQueriesButton
-            width: 70
-            height: 30
-            buttonText: "clear"
-            fontPointSize: 14
-            anchors {
-                verticalCenter: addNewQuery.verticalCenter
-                left: addNewQuery.right
-                leftMargin: 5
-            }
-            onClickedFoo: {
-                queryList.remove(0, queryList.count);
-            }
+        Component.onCompleted: {
+            listModel.append({"message": "banana"})
+            listModel.append({"message": "apple"})
+            listModel.append({"message": "banana"})
+            listModel.append({"message": "apple"})
         }
     }
 
-    Item {
+    MyWindow {
         id: paths
-        width: parent.width / 2 - 20
-        height: parent.height / 3
-        anchors {
-            top: parent.top
-            right: parent.right
-            margins: 10
-            topMargin: 50
-        }
+        anchors.right: parent.right
+        anchors.margins:10
+        anchors.top: parent.top
+        anchors.topMargin: 50
 
-        Rectangle {
-            id: backGroundPaths
-            anchors.fill: parent
-            color: "#2e2d2d"
-            border {
-                color: "black"
-                width: 6
-            }
-        }
+        title: "Paths"
+        placeHolderText: "Enter/new/path"
 
-        Text {
-            id: titlePaths
-            text: "Paths to files and directories"
-            color: standardTextColor
-            anchors {
-                bottom: parent.top
-                horizontalCenter: parent.horizontalCenter
-            }
-            font.pointSize: 25
-        }
-
-        ListModel {
-            id: pathList
-            ListElement {
-                path: "file001.txt"
-            }
-
-            ListElement {
-                path: "file002.txt"
-            }
-
-            ListElement {
-                path: "file003.txt"
-            }
-
-            ListElement {
-                path: "file004.txt"
-            }
-        }
-
-        ListView {
-            id: pathView
-            model: pathList
-            height: parent.height - backGroundPaths.border.width * 4
-            width: parent.width - backGroundPaths.border.width * 4
-            spacing: 10
-            clip: true
-            anchors {
-                left: parent.left
-                top: parent.top
-                margins: 10
-            }
-
-            ScrollBar.vertical: ScrollBar {
-                id: pathVerticalSlider
-                anchors {
-                    right: pathList.right
-                    top: pathList.top
-                }
-                width: 15
-            }
-
-            delegate: RowLayout {
-                id: path
-                spacing: 10
-
-
-                Label {
-                    id: pathIndex
-                    text: index + 1 + "."
-                    color: "white"
-                    font.pointSize: 15
-                }
-
-                TextInput {
-                    //Layout.preferredWidth: queryList.width - queryVerticalSlider.width - myIndex.width - query.spacing //this is don't work
-                    //Layout.fillWidth: false
-                    //PlaceholderText: "Enter path to your file"
-                    height: 15
-                    font.pointSize: 15
-                    text: model.path
-                    color: "white"
-                    onTextEdited: {
-                        model.path = text
-                    }
-                }
-
-                MyButton { // delete query button
-                    width: 40
-                    height: 25
-                    buttonText: "-"
-                    fontPointSize: 15
-                    staticButtonColor: "black"
-
-                    onClickedFoo: {
-                        pathList.remove(index);
-                    }
-                }
-            }
-        }
-
-        MyButton { // add new file button
-            id: addNewPath
-            width: 100
-            height: 30
-            buttonText: "+"
-            fontPointSize: 20
-
-            anchors {
-                left: parent.left
-                top: parent.bottom
-                topMargin: 5
-            }
-
-            onClickedFoo: {
-                pathList.append({path: "Enter/new/path/to/file"});
-                pathView.positionViewAtIndex(pathList.count - 1, pathView.End);
-            }
-        }
-
-        MyButton {
-            id: clearPathsButton
-            width: 70
-            height: 30
-            buttonText: "clear"
-            fontPointSize: 14
-            anchors {
-                verticalCenter: addNewPath.verticalCenter
-                left: addNewPath.right
-                leftMargin: 5
-            }
-            onClickedFoo: {
-                pathList.remove(0, pathList.count);
-            }
+        Component.onCompleted: {
+            listModel.append({"message": "file001.txt"});
+            listModel.append({"message": "myDirectory/*"});
         }
     }
 

@@ -5,6 +5,7 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QString>
+#include <QAbstractListModel>
 
 #include "ConverterJSON.h"
 #include "InvertedIndex.h"
@@ -69,7 +70,7 @@ int main(int argc, char **argv) {
             std::cerr << e.what();
             return -1;
         }
-        
+
         if (engine.rootObjects().isEmpty()) {
             return -1;
         }

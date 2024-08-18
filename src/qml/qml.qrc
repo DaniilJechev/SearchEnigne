@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>MyButton.qml</file>
+        <file>MyWindow.qml</file>
     </qresource>
 </RCC>

@@ -14,7 +14,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-add_executable(SearchEngine ${Src})
+add_executable(SearchEngine ${Src} qml/qml.qrc)
 #qt6_add_executable(SearchEngine ${Src})
 
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick)
