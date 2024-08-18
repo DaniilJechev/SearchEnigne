@@ -8,6 +8,8 @@
     "empty.txt",
     "simpleText.txt",
     "manyLines.txt",
-    "nonExistFile.txt"
+    "nonExistFile.txt",
+    "checkSubdirs/*",
+    "dontCheckSubdirs/"
   ]
 }

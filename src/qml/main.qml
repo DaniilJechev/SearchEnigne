@@ -29,10 +29,8 @@ ApplicationWindow {
             bottomMargin: 10
             horizontalCenter:parent.horizontalCenter
         }
-
-        MouseArea {
-            // onClicked: {  //search
-            // }
+        onClickedFoo: {
+            myClass.search();
         }
     }
 
@@ -149,10 +147,11 @@ ApplicationWindow {
         }
 
         MyButton { // add new query button
+            id: addNewQuery
             width: 100
             height: 30
             buttonText: "+"
-            fontPointSize: 15
+            fontPointSize: 20
 
             anchors {
                 left: parent.left
@@ -165,10 +164,26 @@ ApplicationWindow {
                 queryView.positionViewAtIndex(queryList.count - 1, queryView.End);
             }
         }
+
+        MyButton {
+            id: clearQueriesButton
+            width: 70
+            height: 30
+            buttonText: "clear"
+            fontPointSize: 14
+            anchors {
+                verticalCenter: addNewQuery.verticalCenter
+                left: addNewQuery.right
+                leftMargin: 5
+            }
+            onClickedFoo: {
+                queryList.remove(0, queryList.count);
+            }
+        }
     }
 
     Item {
-        id: files
+        id: paths
         width: parent.width / 2 - 20
         height: parent.height / 3
         anchors {
@@ -179,7 +194,7 @@ ApplicationWindow {
         }
 
         Rectangle {
-            id: backGroundFiles
+            id: backGroundPaths
             anchors.fill: parent
             color: "#2e2d2d"
             border {
@@ -189,8 +204,8 @@ ApplicationWindow {
         }
 
         Text {
-            id: titleFiles
-            text: "Files"
+            id: titlePaths
+            text: "Paths to files and directories"
             color: standardTextColor
             anchors {
                 bottom: parent.top
@@ -200,29 +215,29 @@ ApplicationWindow {
         }
 
         ListModel {
-            id: fileList
+            id: pathList
             ListElement {
-                file: "file001.txt"
+                path: "file001.txt"
             }
 
             ListElement {
-                file: "file002.txt"
+                path: "file002.txt"
             }
 
             ListElement {
-                file: "file003.txt"
+                path: "file003.txt"
             }
 
             ListElement {
-                file: "file004.txt"
+                path: "file004.txt"
             }
         }
 
         ListView {
-            id: fileView
-            model: fileList
-            height: parent.height - backGroundFiles.border.width * 4
-            width: parent.width - backGroundFiles.border.width * 4
+            id: pathView
+            model: pathList
+            height: parent.height - backGroundPaths.border.width * 4
+            width: parent.width - backGroundPaths.border.width * 4
             spacing: 10
             clip: true
             anchors {
@@ -232,21 +247,21 @@ ApplicationWindow {
             }
 
             ScrollBar.vertical: ScrollBar {
-                id: fileVerticalSlider
+                id: pathVerticalSlider
                 anchors {
-                    right: fileList.right
-                    top: fileList.top
+                    right: pathList.right
+                    top: pathList.top
                 }
                 width: 15
             }
 
             delegate: RowLayout {
-                id: file
+                id: path
                 spacing: 10
 
 
                 Label {
-                    id: fileIndex
+                    id: pathIndex
                     text: index + 1 + "."
                     color: "white"
                     font.pointSize: 15
@@ -258,10 +273,10 @@ ApplicationWindow {
                     //PlaceholderText: "Enter path to your file"
                     height: 15
                     font.pointSize: 15
-                    text: model.file
+                    text: model.path
                     color: "white"
                     onTextEdited: {
-                        model.file = text
+                        model.path = text
                     }
                 }
 
@@ -273,17 +288,18 @@ ApplicationWindow {
                     staticButtonColor: "black"
 
                     onClickedFoo: {
-                        fileList.remove(index);
+                        pathList.remove(index);
                     }
                 }
             }
         }
 
         MyButton { // add new file button
+            id: addNewPath
             width: 100
             height: 30
             buttonText: "+"
-            fontPointSize: 15
+            fontPointSize: 20
 
             anchors {
                 left: parent.left
@@ -292,8 +308,24 @@ ApplicationWindow {
             }
 
             onClickedFoo: {
-                fileList.append({file: "Enter new path to file"});
-                fileView.positionViewAtIndex(fileList.count - 1, fileView.End);
+                pathList.append({path: "Enter/new/path/to/file"});
+                pathView.positionViewAtIndex(pathList.count - 1, pathView.End);
+            }
+        }
+
+        MyButton {
+            id: clearPathsButton
+            width: 70
+            height: 30
+            buttonText: "clear"
+            fontPointSize: 14
+            anchors {
+                verticalCenter: addNewPath.verticalCenter
+                left: addNewPath.right
+                leftMargin: 5
+            }
+            onClickedFoo: {
+                pathList.remove(0, pathList.count);
             }
         }
     }
@@ -332,18 +364,6 @@ ApplicationWindow {
 
         ListModel {
             id: answerList
-            ListElement {
-                answer: "1234"
-            }
-
-            ListElement {
-                answer: "1234"
-            }
-
-            ListElement {
-                answer: "1234"
-            }
-
             ListElement {
                 answer: "1234"
             }
@@ -425,18 +445,38 @@ ApplicationWindow {
             font.pointSize: 25
         }
 
+        QtObject {
+            id: colorDefinitions
+            property var alertStatus: ({
+                safely: "white",
+                warning: "#e6e600",
+                critical: "red"
+            })
+            function getColor (status) {
+                if (status === "safely") return alertStatus.safely;
+                if (status === "warning") return alertStatus.warning;
+                if (status === "critical") return alertStatus.critical;
+                return "white"; // default color
+            }
+        }
+
+
         ListModel {
             id: alertList
+
             ListElement {
+                dangerStatus: "safely"
                 alert: "file <filename> is not found"
             }
 
             ListElement {
-                alert: "the \"name\" field in \"config.json\" is not exist"
+                dangerStatus: "warning"
+                alert: "directory <path/to/directory> is empty"
             }
 
             ListElement {
-                alert: "..."
+                dangerStatus: "critical"
+                alert: "\"name\" field in \"config.json\" is not exist"
             }
         }
 
@@ -470,7 +510,7 @@ ApplicationWindow {
                     height: 15
                     font.pointSize: 15
                     text: model.alert
-                    color: "white"
+                    color: colorDefinitions.getColor(model.dangerStatus);
                 }
             }
         }

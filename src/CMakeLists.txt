@@ -9,8 +9,15 @@ set(Src
         )
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR})
+
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
+
 add_executable(SearchEngine ${Src})
 #qt6_add_executable(SearchEngine ${Src})
+
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick)
 
 target_link_libraries(SearchEngine
         nlohmann_json::nlohmann_json
@@ -19,7 +26,5 @@ target_link_libraries(SearchEngine
         Qt6::Qml
         Qt6::Quick
         )
+
 target_include_directories(SearchEngine PUBLIC ${MY_INCLUDE_DIR})
-
-
-find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick)
