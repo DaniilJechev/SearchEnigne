@@ -17,7 +17,7 @@ set(CMAKE_AUTOUIC ON)
 add_executable(SearchEngine ${Src} qml/qml.qrc)
 #qt6_add_executable(SearchEngine ${Src})
 
-find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick)
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick QuickControls2)
 
 target_link_libraries(SearchEngine
         nlohmann_json::nlohmann_json
@@ -25,6 +25,7 @@ target_link_libraries(SearchEngine
         Qt6::Gui
         Qt6::Qml
         Qt6::Quick
+        Qt6::QuickControls2
         )
 
 target_include_directories(SearchEngine PUBLIC ${MY_INCLUDE_DIR})

@@ -8,13 +8,14 @@ Item {
     height: parent.height / 3
 
     property string title
-    property string placeHolderText
+    property string myPlaceHolderText
+    property string windowColor: "#2e2d2d"
     property alias listModel : m_listModel
 
     Rectangle {
         id: backGroundWindow
         anchors.fill: parent
-        color: "#2e2d2d"
+        color: windowColor
         border {
             color: "black"
             width: 6
@@ -41,7 +42,7 @@ Item {
         model: listModel
         height: parent.height - backGroundWindow.border.width * 4
         width: parent.width - backGroundWindow.border.width * 4
-        spacing: 10
+        spacing: 5
         clip: true
         anchors {
             left: parent.left
@@ -63,26 +64,34 @@ Item {
             spacing: 10
 
             Label {
-                id: queryIndex
+                id: idx
                 text: index + 1 + "."
-                color: "white"
+                color: standardTextColor
                 font.pointSize: 15
             }
 
-            TextInput {
-                //Layout.preferredWidth: queryList.width - queryVerticalSlider.width - myIndex.width - query.spacing //this is don't work
-                //Layout.fillWidth: false
-                //PlaceholderText: "Enter your query"
+            TextField {
+                id: textField
                 height: 15
-                font.pointSize: 15
+                implicitWidth: window.width - deleteButton.width - idx.width - myDelegate.spacing * 2 - backGroundWindow.border.width * 2 - 15
                 text: model.message
-                color: "white"
+                color: standardTextColor
+                placeholderText: myPlaceHolderText
+                placeholderTextColor: Qt.rgba(255, 255, 255, 0.65)
+                font.pointSize: 17
+
+                background: Rectangle {
+                    anchors.fill: parent
+                    color: windowColor
+                }
+
                 onTextEdited: {
                     model.message = text
                 }
             }
 
-            MyButton { // delete query button
+            MyButton { // delete button
+                id: deleteButton
                 width: 40
                 height: 25
                 buttonText: "-"
@@ -96,7 +105,7 @@ Item {
             }
         }
 
-    MyButton { // add new query button
+    MyButton { // add new button
         id: addNewButton
         width: 100
         height: 30
@@ -110,7 +119,7 @@ Item {
         }
 
         onClickedFoo: {
-            m_listModel.append({message: placeHolderText});
+            m_listModel.append({});
             listView.positionViewAtIndex(m_listModel.count - 1, listView.End);
         }
     }

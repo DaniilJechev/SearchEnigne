@@ -6,6 +6,7 @@
 #include <QQmlContext>
 #include <QString>
 #include <QAbstractListModel>
+#include <QtQuickControls2/QQuickStyle>
 
 #include "ConverterJSON.h"
 #include "InvertedIndex.h"
@@ -43,6 +44,7 @@ int main(int argc, char **argv) {
         myClass.search();
         return 0;
     } else {
+        QQuickStyle::setStyle("Universal");
         QGuiApplication app(argc, argv);
         QQmlApplicationEngine engine;
         QString mainQmlPath = QString::fromStdString(global::mainQmlFile.string());

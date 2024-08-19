@@ -42,7 +42,7 @@ ApplicationWindow {
         anchors.topMargin: 50
 
         title: "Queries"
-        placeHolderText: "Enter new query"
+        myPlaceHolderText: "Enter new query"
 
         Component.onCompleted: {
             listModel.append({"message": "banana"})
@@ -60,7 +60,7 @@ ApplicationWindow {
         anchors.topMargin: 50
 
         title: "Paths"
-        placeHolderText: "Enter/new/path"
+        myPlaceHolderText: "Enter/new/path"
 
         Component.onCompleted: {
             listModel.append({"message": "file001.txt"});
