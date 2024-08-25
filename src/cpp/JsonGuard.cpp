@@ -42,15 +42,15 @@ void checkConfig() {
         throw std::runtime_error(R"(field "max_responses" in "config.json" contain number less the 1)");
     }
 
-    //check the "files" field
-    if (!data.contains("files")) {
-        throw std::runtime_error(R"(field "files" in "config.json" is not exist)");
-    } else if (data["files"].empty()) {
-        throw std::runtime_error(R"(field "files" in "config.json" is empty)");
-    } else if (!data.at("files").is_array()) {
-        throw std::runtime_error(R"(field "files" in "config.json" must keep array elements)");
+    //check the "paths" field
+    if (!data.contains("paths")) {
+        throw std::runtime_error(R"(field "paths" in "config.json" is not exist)");
+    } else if (data["paths"].empty()) {
+        throw std::runtime_error(R"(field "paths" in "config.json" is empty)");
+    } else if (!data.at("paths").is_array()) {
+        throw std::runtime_error(R"(field "paths" in "config.json" must keep array elements)");
     }
-    for (const auto &it: data["files"]) {
+    for (const auto &it: data["paths"]) {
         if (!it.is_string()) {
             throw std::runtime_error("path in \"config.json\" can't be a non-string value. "
                                      "\nError path: " + to_string(it));

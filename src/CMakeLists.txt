@@ -1,12 +1,16 @@
 cmake_minimum_required (VERSION 3.8)
 
 set(Src
-        "cpp/ConverterJSON.cpp"
+        "cpp/main.cpp"
         "cpp/SearchServer.cpp"
         "cpp/InvertedIndex.cpp"
         "cpp/JsonGuard.cpp"
-        "cpp/main.cpp"
-        )
+        "cpp/ConverterJSON.cpp"
+        "cpp/myWindowListModel.cpp"
+        "cpp/SearchHandler.cpp"
+        "cpp/AlertModel.cpp"
+        "../include/globals.h"
+)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR})
 
@@ -14,10 +18,9 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-add_executable(SearchEngine ${Src} qml/qml.qrc)
-#qt6_add_executable(SearchEngine ${Src})
-
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick QuickControls2)
+
+add_executable(SearchEngine ${Src} qml/qml.qrc)
 
 target_link_libraries(SearchEngine
         nlohmann_json::nlohmann_json

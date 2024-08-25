@@ -4,34 +4,21 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
+#include <QQmlEngine>
 #include <QString>
-#include <QAbstractListModel>
 #include <QtQuickControls2/QQuickStyle>
 
 #include "ConverterJSON.h"
-#include "InvertedIndex.h"
-#include "SearchServer.h"
 #include "JsonGuard.h"
 #include "globals.h"
-
-class MyClass : public QObject {
-    Q_OBJECT
-public:
-    Q_INVOKABLE void search() {
-        InvertedIndex idx;
-        idx.UpdateDocumentBase(ConverterJSON::getTextDocuments(global::jsonDir,
-                                                               global::resourcesDir));
-        SearchServer server(idx);
-        auto answers = server.search(ConverterJSON::getRequests(global::jsonDir),
-                                     ConverterJSON::getResponsesLimit(global::jsonDir));
-        ConverterJSON::putAnswers(answers, global::jsonDir);
-    }
-};
+#include "myWindowListModel.h"
+#include "SearchHandler.h"
+#include "AlertModel.h"
 
 int main(int argc, char **argv) {
 
     std::string runMode = ConverterJSON::getRunMode(global::jsonDir);
-    MyClass myClass;
+    SearchHandler searchHandler;
     if (runMode == "console") {
         try {
             checkConfig();
@@ -41,7 +28,7 @@ int main(int argc, char **argv) {
             std::cerr << e.what();
             return -1;
         }
-        myClass.search();
+        searchHandler.search();
         return 0;
     } else {
         QQuickStyle::setStyle("Universal");
@@ -59,7 +46,29 @@ int main(int argc, char **argv) {
                 },
                 Qt::QueuedConnection);
 
-        engine.rootContext()->setContextProperty("myClass", &myClass);
+        engine.rootContext()->setContextProperty("searchHandler", &searchHandler);
+        qmlRegisterSingletonType<ConverterJSON>("ConverterJSON", 1, 0, "ConverterJSON",
+                                                [](QQmlEngine *, QJSEngine *) -> QObject * {
+                                                    return ConverterJSON::getInstance();
+                                                });
+        qmlRegisterType<MyWindowListModel>("MyWindowListModel", 1, 0, "WindowListModel");
+        qmlRegisterType<AlertModel>("MyAlertModel", 1, 0, "AlertModel");
+        // register 2 enum classes
+        qmlRegisterUncreatableMetaObject(
+            AlertStates::staticMetaObject,
+            "AlertStates",
+            1, 0,
+            "AlertStates",
+            "Enum is uncreatable"
+        );
+        qmlRegisterUncreatableMetaObject(
+            ListModelType::staticMetaObject,
+            "ListModelType",
+            1, 0,
+            "ListModelType",
+            "Enum is uncreatable"
+            );
+
         engine.addImportPath(QCoreApplication::applicationDirPath() + "/qml");
         engine.addImportPath(":/");
         engine.load(url);
@@ -80,5 +89,3 @@ int main(int argc, char **argv) {
         return app.exec();
     }
 }
-
-#include "main.moc"

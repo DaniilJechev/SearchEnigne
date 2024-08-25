@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
+import MyWindowListModel
 
 Item {
     id: window
@@ -11,6 +12,22 @@ Item {
     property string myPlaceHolderText
     property string windowColor: "#2e2d2d"
     property alias listModel : m_listModel
+    property var customFilter : null
+    property var customGetNewMessage : null
+
+    function filter(str) {
+        if (customFilter) {
+            return customFilter(str)
+        }
+        return str
+    }
+
+    function getNewMessage(message) {
+        if (customGetNewMessage) {
+            return customGetNewMessage()
+        }
+        return message
+    }
 
     Rectangle {
         id: backGroundWindow
@@ -33,13 +50,13 @@ Item {
         font.pointSize: 25
     }
 
-    ListModel {
+    WindowListModel {
         id: m_listModel
     }
 
     ListView {
         id: listView
-        model: listModel
+        model: m_listModel
         height: parent.height - backGroundWindow.border.width * 4
         width: parent.width - backGroundWindow.border.width * 4
         spacing: 5
@@ -73,7 +90,8 @@ Item {
             TextField {
                 id: textField
                 height: 15
-                implicitWidth: window.width - deleteButton.width - idx.width - myDelegate.spacing * 2 - backGroundWindow.border.width * 2 - 15
+                implicitWidth: window.width - deleteButton.width - idx.width - myDelegate.spacing * 2
+                               - backGroundWindow.border.width * 2 - verticalSlider.width * 2 - 5
                 text: model.message
                 color: standardTextColor
                 placeholderText: myPlaceHolderText
@@ -86,11 +104,12 @@ Item {
                 }
 
                 onTextEdited: {
+                    text = filter(text)
                     model.message = text
                 }
             }
 
-            MyButton { // delete button
+            MyButton { // "delete" button
                 id: deleteButton
                 width: 40
                 height: 25
@@ -105,7 +124,7 @@ Item {
             }
         }
 
-    MyButton { // add new button
+    MyButton { // add "new" button
         id: addNewButton
         width: 100
         height: 30
@@ -119,8 +138,8 @@ Item {
         }
 
         onClickedFoo: {
-            m_listModel.append({});
-            listView.positionViewAtIndex(m_listModel.count - 1, listView.End);
+            m_listModel.appendMessage(getNewMessage(""));
+            listView.positionViewAtIndex(m_listModel.rowCount() - 1, listView.End);
         }
     }
 
@@ -136,8 +155,8 @@ Item {
             leftMargin: 5
         }
         onClickedFoo: {
-            if (m_listModel.count === 0) return;
-            m_listModel.remove(0, m_listModel.count);
+            if (m_listModel.rowCount() === 0) return;
+            m_listModel.remove(0, m_listModel.rowCount());
         }
     }
 }

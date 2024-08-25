@@ -8,15 +8,26 @@
 
 #include "nlohmann/json.hpp"
 #include "SearchServer.h"
+#include "globals.h"
 
 namespace fs = std::filesystem;
+
+ConverterJSON* ConverterJSON::converterJson = nullptr;
+
+ConverterJSON *ConverterJSON::getInstance() {
+    if (converterJson == nullptr) {
+        converterJson = new ConverterJSON();
+    }
+    return converterJson;
+}
+
 
 bool ConverterJSON::isStarTerminated(const fs::path &dir) {
     std::string path = dir.string();
     return !path.empty() && path.back() == '*';
 }
 
-std::string ConverterJSON::getTextFromFile(const fs::path& filePath) {
+std::string ConverterJSON::getTextFromFile(const fs::path &filePath) {
     std::ifstream file(filePath);
     std::string fileText, line;
     while (std::getline(file, line)) {
@@ -36,13 +47,14 @@ bool ConverterJSON::isTxtOrDirectory(const fs::path &path) {
 
 std::vector<std::string> ConverterJSON::getTextsFromDir(const fs::path &dir, bool checkSubdirs) {
     std::vector<std::string> textDocuments;
-    for (const auto& entry : fs::directory_iterator(dir)) {
+    for (const auto &entry: fs::directory_iterator(dir)) {
         if (entry.is_regular_file()) {
             textDocuments.push_back(ConverterJSON::getTextFromFile(entry.path()));
         } else if (entry.is_directory() && checkSubdirs) {
             auto textsFromDir = ConverterJSON::getTextsFromDir(entry.path(), checkSubdirs);
             textDocuments.insert(textDocuments.end(),
-                                 textsFromDir.begin(), textsFromDir.end()); // merging of new text arr with main text arr
+                                 textsFromDir.begin(),
+                                 textsFromDir.end()); // merging of new text arr with main text arr
         }
     }
     return textDocuments;
@@ -95,7 +107,8 @@ std::vector<std::string> ConverterJSON::getTextDocuments(const fs::path &jsonDir
         } else if (is_directory(path)) {
             auto textsFromDir = ConverterJSON::getTextsFromDir(path, checkSubdirs);
             textDocuments.insert(textDocuments.end(),
-                                 textsFromDir.begin(), textsFromDir.end()); // merging of new text arr with main text arr
+                                 textsFromDir.begin(),
+                                 textsFromDir.end()); // merging of new text arr with main text arr
         }
     }
     return textDocuments;
@@ -118,6 +131,20 @@ std::vector<std::string> ConverterJSON::getRequests(const fs::path &jsonDir) {
     for (const auto &it: data["requests"]) {
         std::string query = it;
         requests.push_back(query);
+    }
+
+    return requests;
+}
+
+std::vector<std::string> ConverterJSON::getPaths(const fs::path &jsonDir) {
+    nlohmann::json data;
+    std::vector<std::string> requests;
+    std::ifstream file(jsonDir.string() + "config.json");
+    file >> data;
+
+    for (const auto &it: data["paths"]) {
+        std::string path = it;
+        requests.push_back(path);
     }
 
     return requests;
@@ -163,3 +190,40 @@ std::string ConverterJSON::getRunMode(const fs::path &jsonDir) {
     }
     return "application";
 }
+
+void ConverterJSON::writeToJson(const QList<QString> &data, int listModelType) {
+    std::string jsonFileName;
+    std::string jsonArrName;
+    switch (listModelType) {
+        case ListModelType::queries:
+            jsonFileName = "requests.json";
+            jsonArrName = "requests";
+            break;
+
+        case ListModelType::paths:
+            jsonFileName = "config.json";
+            jsonArrName = "paths";
+            break;
+
+        default:
+            std::cerr << "Incorrect \"writingType\"" << std::endl;
+            return;
+    }
+
+    nlohmann::json myData;
+    std::ifstream reading (global::jsonDir / jsonFileName);
+    reading >> myData;
+    reading.close();
+
+    myData.erase(jsonArrName);
+    for (const auto &value : data) {
+        if (value.isEmpty()) continue;
+        myData[jsonArrName].push_back(value.toStdString());
+    }
+
+    std::ofstream writing (global::jsonDir / jsonFileName);
+    writing << myData.dump(4);
+    writing.close();
+}
+
+#include "moc_ConverterJSON.cpp"

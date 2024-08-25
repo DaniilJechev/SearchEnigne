@@ -81,26 +81,27 @@ ApplicationWindow {
 
         title: "Paths"
         myPlaceHolderText: "Enter/new/path"
+        
 
         Component.onCompleted: {
             listModel.fillData(1); //replace to ListModelType.paths
         }
 
         customGetNewMessage: function() {
-            fileDialog.open()
+            newFilePathDialog.open()
         }
 
         FileDialog {
-            id: fileDialog
+            id: newFilePathDialog
             title: "Choose directory or \".txt\" file"
             nameFilters: ["Text files (*.txt)", "Any files (*)"]
             
             onAccepted: {
-                console.log(fileDialog.selectedFile)
+                
             }
             
             onRejected: {
-                return ""
+                
             }
         }
     }
