@@ -11,22 +11,18 @@ Item {
     property string title
     property string myPlaceHolderText
     property string windowColor: "#2e2d2d"
+
     property alias listModel : m_listModel
+    property alias clearButton: m_clearButton
+    property alias addEmptyButton: m_addEmptyButton
+
     property var customFilter : null
-    property var customGetNewMessage : null
 
     function filter(str) {
         if (customFilter) {
             return customFilter(str)
         }
         return str
-    }
-
-    function getNewMessage(message) {
-        if (customGetNewMessage) {
-            return customGetNewMessage()
-        }
-        return message
     }
 
     Rectangle {
@@ -124,8 +120,8 @@ Item {
             }
         }
 
-    MyButton { // add "new" button
-        id: addNewButton
+    MyButton {
+        id: m_addEmptyButton
         width: 100
         height: 30
         buttonText: "+"
@@ -138,20 +134,20 @@ Item {
         }
 
         onClickedFoo: {
-            m_listModel.appendMessage(getNewMessage(""));
+            m_listModel.appendMessage("");
             listView.positionViewAtIndex(m_listModel.rowCount() - 1, listView.End);
         }
     }
 
     MyButton {
-        id: clearButton
+        id: m_clearButton
         width: 70
         height: 30
         buttonText: "clear"
         fontPointSize: 14
         anchors {
-            verticalCenter: addNewButton.verticalCenter
-            left: addNewButton.right
+            verticalCenter: m_addEmptyButton.verticalCenter
+            left: m_addEmptyButton.right
             leftMargin: 5
         }
         onClickedFoo: {

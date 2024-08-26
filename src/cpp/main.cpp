@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include <QObject>
-#include <QGuiApplication>
+#include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QQmlEngine>
@@ -14,9 +14,9 @@
 #include "myWindowListModel.h"
 #include "SearchHandler.h"
 #include "AlertModel.h"
+#include "DialogFinder.h"
 
 int main(int argc, char **argv) {
-
     std::string runMode = ConverterJSON::getRunMode(global::jsonDir);
     SearchHandler searchHandler;
     if (runMode == "console") {
@@ -32,7 +32,8 @@ int main(int argc, char **argv) {
         return 0;
     } else {
         QQuickStyle::setStyle("Universal");
-        QGuiApplication app(argc, argv);
+        QApplication app(argc, argv);
+
         QQmlApplicationEngine engine;
         QString mainQmlPath = QString::fromStdString(global::mainQmlFile.string());
         const QUrl url = QUrl::fromLocalFile(mainQmlPath);
@@ -45,7 +46,8 @@ int main(int argc, char **argv) {
                         QCoreApplication::exit(-1);
                 },
                 Qt::QueuedConnection);
-
+        DialogFinder dialogFinder;
+        engine.rootContext()->setContextProperty("dialogFinder", &dialogFinder);
         engine.rootContext()->setContextProperty("searchHandler", &searchHandler);
         qmlRegisterSingletonType<ConverterJSON>("ConverterJSON", 1, 0, "ConverterJSON",
                                                 [](QQmlEngine *, QJSEngine *) -> QObject * {

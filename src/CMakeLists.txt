@@ -9,6 +9,7 @@ set(Src
         "cpp/myWindowListModel.cpp"
         "cpp/SearchHandler.cpp"
         "cpp/AlertModel.cpp"
+        "cpp/DialogFinder.cpp"
         "../include/globals.h"
 )
 
@@ -18,7 +19,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick QuickControls2)
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick QuickControls2 Widgets)
 
 add_executable(SearchEngine ${Src} qml/qml.qrc)
 
@@ -29,6 +30,7 @@ target_link_libraries(SearchEngine
         Qt6::Qml
         Qt6::Quick
         Qt6::QuickControls2
-        )
+        Qt6::Widgets
+)
 
 target_include_directories(SearchEngine PUBLIC ${MY_INCLUDE_DIR})

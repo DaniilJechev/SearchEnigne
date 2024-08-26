@@ -82,26 +82,55 @@ ApplicationWindow {
         title: "Paths"
         myPlaceHolderText: "Enter/new/path"
 
+
+        MyButton { // open file
+            id: browseFile
+            width: 115
+            height: 30
+            buttonText: "Browse file"
+            fontPointSize: 14
+
+            anchors {
+                left: parent.addEmptyButton.right
+                verticalCenter: parent.addEmptyButton.verticalCenter
+                leftMargin: 5
+                rightMargin: 5
+            }
+
+            onClickedFoo: {
+                var path = dialogFinder.openFileDialog();
+                if (path.length !== 0) {
+                    parent.listModel.appendMessage(path)
+                }
+            }
+        }
+
+        MyButton { // open directory
+            id: browseDirectory
+            width: 165
+            height: 30
+            buttonText: "Browse directory"
+            fontPointSize: 14
+
+            anchors {
+                left: browseFile.right
+                verticalCenter: browseFile.verticalCenter
+                leftMargin: 5
+                rightMargin: 5
+            }
+
+            onClickedFoo: {
+                var path = dialogFinder.openDirDialog();
+                if (path.length !== 0) {
+                    parent.listModel.appendMessage(path)
+                }
+            }
+        }
+
+        clearButton.anchors.left: browseDirectory.right
+
         Component.onCompleted: {
             listModel.fillData(1); //replace to ListModelType.paths
-        }
-
-        customGetNewMessage: function() {
-            fileDialog.open()
-        }
-
-        FileDialog {
-            id: fileDialog
-            title: "Choose directory or \".txt\" file"
-            nameFilters: ["Text files (*.txt)", "Any files (*)"]
-            
-            onAccepted: {
-                console.log(fileDialog.selectedFile)
-            }
-            
-            onRejected: {
-                return ""
-            }
         }
     }
 
