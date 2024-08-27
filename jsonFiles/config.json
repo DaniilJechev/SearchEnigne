@@ -6,8 +6,7 @@
         "version": "0.1"
     },
     "paths": [
-        "file",
-        "filetxt",
-        "D:/test*"
+        "file001.txt",
+        "file002.txt"
     ]
 }

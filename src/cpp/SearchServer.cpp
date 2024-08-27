@@ -7,16 +7,13 @@
 #include <utility>
 #include <algorithm>
 
-bool RelativeIndex::operator==(const RelativeIndex &other) const {
-    return (m_docId == other.m_docId && m_rank == other.m_rank);
-}
-
-std::vector<std::vector<RelativeIndex>> SearchServer::search(const std::vector<std::string> &queriesInput, size_t maxResponses) {
+std::vector<std::vector<RelativeIndex>> SearchServer::search(
+        const std::vector<std::string> &queriesInput, size_t maxResponses) {
     std::vector<std::vector<RelativeIndex>> result;
     for (const auto &query: queriesInput) {
         std::string word;
         std::stringstream stream(query);
-        std::vector<RelativeIndex> docRelativeIdx;
+        std::vector<RelativeIndex> docRelativeIdx; // add the path to file
         while (stream >> word) {
             for (const auto &it: m_freqDict.GetWordCount(word)) {
                 SearchServer::addIndex(docRelativeIdx, it);
@@ -47,7 +44,9 @@ void SearchServer::addIndex(std::vector<RelativeIndex> &docRelativeIdx, const En
             return;
         }
     }
-    docRelativeIdx.emplace_back(newIdx.m_docId, static_cast<float>(newIdx.m_count));
+    docRelativeIdx.emplace_back(newIdx.m_docId,
+                                static_cast<float>(newIdx.m_count),
+                                newIdx.m_pathToFile);
 }
 
 void SearchServer::convertAbsToRelative(std::vector<RelativeIndex> &docRelativeIdx) { //array must be sorted

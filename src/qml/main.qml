@@ -40,6 +40,8 @@ ApplicationWindow {
             ConverterJSON.writeToJson(queries.listModel.getAllData(), 0); //after enum exposing fix change to ListModelType.queries
             ConverterJSON.writeToJson(paths.listModel.getAllData(), 1); //after enum exposing fix change to ListModelType.paths
             searchHandler.search();
+            answerList.clear();
+            answerList.append({"answer": ConverterJSON.getAnswers()});
             console.log(AlertStates.safely, " ", AlertStates.warning, " ", AlertStates.critical); //delete later
         }
     }
@@ -173,9 +175,6 @@ ApplicationWindow {
 
         ListModel {
             id: answerList
-            ListElement {
-                answer: "1234"
-            }
         }
 
         ListView {
@@ -200,24 +199,10 @@ ApplicationWindow {
                 width: 15
             }
 
-            delegate: RowLayout {
-                id: answer
-                spacing: 10
-
-
-                Label {
-                    id: answerIndex
-                    text: index + 1 + "."
-                    color: "white"
-                    font.pointSize: 15
-                }
-
-                Label {
-                    height: 15
-                    font.pointSize: 15
-                    text: model.answer
-                    color: "white"
-                }
+            delegate: Label {
+                font.pointSize: 15
+                text: model.answer
+                color: "white"
             }
         }
     }

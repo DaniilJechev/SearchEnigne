@@ -9,13 +9,11 @@
 
 std::mutex m_freqDict_access;
 
-Entry::Entry(size_t docId, size_t count) : m_docId(docId), m_count(count) {}
-
-void InvertedIndex::UpdateDocumentBase(const std::vector<std::string>& docs) {
+void InvertedIndex::UpdateDocumentBase(const std::vector<DocumentInfo>& docsInfo) {
     int textId = 0;
     std::vector<std::thread> threads;
-    for (const auto& doc : docs) {
-        threads.emplace_back(&InvertedIndex::getTermFrequencyFromText, this, doc, textId);
+    for (const auto& docInfo : docsInfo) {
+        threads.emplace_back(&InvertedIndex::getTermFrequencyFromText, this, docInfo, textId);
         textId++;
     }
 
@@ -32,9 +30,9 @@ std::vector<Entry> InvertedIndex::GetWordCount(const std::string& word) {
     return freq;
 }
 
-void InvertedIndex::getTermFrequencyFromText(const std::string& text, int textId) {
+void InvertedIndex::getTermFrequencyFromText(const DocumentInfo& docInfo, int textId) {
     std::string word;
-    std::stringstream textStream(text);
+    std::stringstream textStream(docInfo.m_docText);
     std::map<std::string, size_t> localTermFreq;
 
     while (textStream >> word) {
@@ -43,6 +41,6 @@ void InvertedIndex::getTermFrequencyFromText(const std::string& text, int textId
 
     std::lock_guard<std::mutex> lock(m_freqDict_access);
     for (const auto& it : localTermFreq) {
-        m_freqDict[it.first].emplace_back(textId, it.second);
+        m_freqDict[it.first].emplace_back(textId, it.second, docInfo.m_pathToDoc);
     }
 }

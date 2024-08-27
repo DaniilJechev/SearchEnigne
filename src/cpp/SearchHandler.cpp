@@ -10,10 +10,10 @@ void SearchHandler::search() {
     idx.UpdateDocumentBase(ConverterJSON::getTextDocuments(global::jsonDir,
                                                                global::resourcesDir));
     SearchServer server(idx);
-    auto answers = server.search(ConverterJSON::getRequests(global::jsonDir),
-                                     ConverterJSON::getResponsesLimit(global::jsonDir));
-    ConverterJSON::putAnswers(answers, global::jsonDir);
-
+    auto queries = ConverterJSON::getRequests(global::jsonDir);
+    auto answers = server.search(queries,
+                                 ConverterJSON::getResponsesLimit(global::jsonDir));
+    ConverterJSON::putAnswers(answers, global::jsonDir, queries);
 }
 
 

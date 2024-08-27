@@ -5,12 +5,21 @@
 #include <string>
 #include <iostream>
 #include <filesystem>
+#include <cctype>
+#include <algorithm>
 
 #include "nlohmann/json.hpp"
-#include "SearchServer.h"
 #include "globals.h"
 
 namespace fs = std::filesystem;
+
+bool Entry::operator==(const Entry &other) const {
+    return (m_count == other.m_count && m_docId == other.m_docId);
+}
+
+bool RelativeIndex::operator==(const RelativeIndex &other) const {
+    return (m_docId == other.m_docId && m_rank == other.m_rank);
+}
 
 ConverterJSON* ConverterJSON::converterJson = nullptr;
 
@@ -31,33 +40,22 @@ std::string ConverterJSON::getTextFromFile(const fs::path &filePath) {
     std::ifstream file(filePath);
     std::string fileText, line;
     while (std::getline(file, line)) {
+        std::transform(line.begin(), line.end(), line.begin(),
+                       [](unsigned char letter) {
+                           return std::tolower(letter);
+                       });
         fileText.append(line);
         if (!fileText.empty()) {
             fileText.push_back(' ');
         }
     }
-    if (!fileText.empty()) fileText.pop_back(); // delete extra spacew
+    if (!fileText.empty()) fileText.pop_back(); // delete extra space
     file.close();
     return fileText;
 }
 
 bool ConverterJSON::isTxtOrDirectory(const fs::path &path) {
     return is_directory(path) || path.extension().string() == ".txt";
-}
-
-std::vector<std::string> ConverterJSON::getTextsFromDir(const fs::path &dir, bool checkSubdirs) {
-    std::vector<std::string> textDocuments;
-    for (const auto &entry: fs::directory_iterator(dir)) {
-        if (entry.is_regular_file()) {
-            textDocuments.push_back(ConverterJSON::getTextFromFile(entry.path()));
-        } else if (entry.is_directory() && checkSubdirs) {
-            auto textsFromDir = ConverterJSON::getTextsFromDir(entry.path(), checkSubdirs);
-            textDocuments.insert(textDocuments.end(),
-                                 textsFromDir.begin(),
-                                 textsFromDir.end()); // merging of new text arr with main text arr
-        }
-    }
-    return textDocuments;
 }
 
 bool ConverterJSON::pathGuard(fs::path &path, const fs::path &resourcesDir) {
@@ -84,14 +82,14 @@ bool ConverterJSON::pathGuard(fs::path &path, const fs::path &resourcesDir) {
 }
 
 
-std::vector<std::string> ConverterJSON::getTextDocuments(const fs::path &jsonDir,
+std::vector<DocumentInfo> ConverterJSON::getTextDocuments(const fs::path &jsonDir,
                                                          const fs::path &resourcesDir) {
-    std::vector<std::string> textDocuments;
+    std::vector<DocumentInfo> textDocuments;
     nlohmann::json configData;
     std::ifstream config(jsonDir.string() + "config.json");
 
     config >> configData; //read all paths
-    for (const auto &it: configData["files"]) {
+    for (const auto &it: configData["paths"]) {
         fs::path path = it;
         bool checkSubdirs = ConverterJSON::isStarTerminated(path);
         if (checkSubdirs) { // delete the star
@@ -102,10 +100,26 @@ std::vector<std::string> ConverterJSON::getTextDocuments(const fs::path &jsonDir
         if (!ConverterJSON::pathGuard(path, resourcesDir)) continue;
 
         if (is_regular_file(path)) {
-            textDocuments.push_back(ConverterJSON::getTextFromFile(path));
+            textDocuments.emplace_back(ConverterJSON::getTextFromFile(path), path.string());
 
         } else if (is_directory(path)) {
             auto textsFromDir = ConverterJSON::getTextsFromDir(path, checkSubdirs);
+            textDocuments.insert(textDocuments.end(),
+                                 textsFromDir.begin(),
+                                 textsFromDir.end()); // merging of new text arr with main text arr
+        }
+    }
+    return textDocuments;
+}
+
+std::vector<DocumentInfo> ConverterJSON::getTextsFromDir(const fs::path &dir, bool checkSubdirs) {
+    std::vector<DocumentInfo> textDocuments;
+    for (const auto &entry: fs::directory_iterator(dir)) {
+        if (entry.is_regular_file()) {
+            textDocuments.emplace_back(ConverterJSON::getTextFromFile(entry.path()),
+                                       entry.path().string());
+        } else if (entry.is_directory() && checkSubdirs) {
+            auto textsFromDir = ConverterJSON::getTextsFromDir(entry.path(), checkSubdirs);
             textDocuments.insert(textDocuments.end(),
                                  textsFromDir.begin(),
                                  textsFromDir.end()); // merging of new text arr with main text arr
@@ -162,18 +176,20 @@ std::string createRequestName(int requestId) {
 
 void
 ConverterJSON::putAnswers(const std::vector<std::vector<RelativeIndex>> &relativeIndexes,
-                          const fs::path &jsonDir) {
+                          const fs::path &jsonDir, const std::vector<std::string>& queries) {
     nlohmann::json answerData;
     std::ofstream answers(jsonDir.string() + "answers.json");
     int requestId = 0;
 
     for (const auto &it: relativeIndexes) {
-        std::string requestName = createRequestName(requestId);
-        answerData[requestName]["result"] = !it.empty();
+        std::string requestIdStr = createRequestName(requestId);
+        answerData[requestIdStr]["result"] = !it.empty();
         for (const auto &it2: it) {
-            answerData[requestName]["relevance"].push_back({{"docId", it2.m_docId},
-                                                            {"rank",  it2.m_rank}});
+            answerData[requestIdStr]["relevance"]["DocId_" + std::to_string(it2.m_docId)] =
+                    {{"rank",       it2.m_rank},
+                     {"pathToFile", it2.m_pathToFile}};
         }
+        answerData[requestIdStr]["queryText"] = queries[requestId];
         ++requestId;
     }
     answers << answerData.dump(4);
@@ -224,6 +240,15 @@ void ConverterJSON::writeToJson(const QList<QString> &data, int listModelType) {
     std::ofstream writing (global::jsonDir / jsonFileName);
     writing << myData.dump(4);
     writing.close();
+}
+
+QString ConverterJSON::getAnswers() {
+    nlohmann::json data;
+    std::ifstream file(global::jsonDir / "answers.json");
+    file >> data;
+    std::string strAnswers = data.dump(4);
+    strAnswers = strAnswers.substr(1, strAnswers.size() - 2); // delete outmost curly brackets
+    return QString::fromStdString(strAnswers);
 }
 
 #include "moc_ConverterJSON.cpp"
