@@ -17,17 +17,11 @@ bool AlertModel::setData(const QModelIndex &idx, const QVariant &value, int role
     return false;
 }
 
-void AlertModel::append(const QString& message, int status) {
-    beginInsertRows(QModelIndex(), m_data.size(), m_data.size());
-    m_data.append({message, status});
-    endInsertRows();
-}
-
 int AlertModel::rowCount(const QModelIndex &idx) const {
     if (idx.isValid()) {
         return static_cast<int>(m_data.size());
     }
-    return 0; 
+    return 0;
 }
 
 QVariant AlertModel::data(const QModelIndex &idx, int role) const {
@@ -47,9 +41,9 @@ QVariant AlertModel::data(const QModelIndex &idx, int role) const {
 }
 
 Qt::ItemFlags AlertModel::flags(const QModelIndex &idx) const {
-    if (idx.isValid()) {
-        return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable;
-    }
+//    if (idx.isValid()) {
+//        return Qt::ItemIsEnabled;
+//    }
     return Qt::NoItemFlags;
 }
 
@@ -60,4 +54,8 @@ QHash<int, QByteArray> AlertModel::roleNames() const {
     return names;
 }
 
-#include "moc_AlertModel.cpp"
+void AlertModel::append(const QString& message, int status) {
+    beginInsertRows(QModelIndex(), m_data.size(), m_data.size());
+    m_data.append({message, status});
+    endInsertRows();
+}

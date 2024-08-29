@@ -56,4 +56,3 @@ void SearchServer::convertAbsToRelative(std::vector<RelativeIndex> &docRelativeI
         it.m_rank /= maxIdx;
     }
 }
-

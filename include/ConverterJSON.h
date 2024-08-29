@@ -65,6 +65,7 @@ public:
     Q_INVOKABLE static QString getAnswers();
 
 private:
+    static std::string createRequestName(int requestId);
     static std::string getTextFromFile(const fs::path& toFile);
     static std::vector<DocumentInfo> getTextsFromDir(const fs::path& dir, bool checkSubdirs);
     static bool isStarTerminated(const fs::path& dir);

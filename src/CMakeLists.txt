@@ -11,6 +11,14 @@ set(Src
         "cpp/AlertModel.cpp"
         "cpp/DialogFinder.cpp"
         "../include/globals.h"
+        "../include/SearchServer.h"
+        "../include/InvertedIndex.h"
+        "../include/JsonGuard.h"
+        "../include/ConverterJSON.h"
+        "../include/myWindowListModel.h"
+        "../include/SearchHandler.h"
+        "../include/AlertModel.h"
+        "../include/DialogFinder.h"
 )
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR})

@@ -37,12 +37,11 @@ ApplicationWindow {
         }
 
         onClickedFoo: {
-            ConverterJSON.writeToJson(queries.listModel.getAllData(), 0); //after enum exposing fix change to ListModelType.queries
-            ConverterJSON.writeToJson(paths.listModel.getAllData(), 1); //after enum exposing fix change to ListModelType.paths
+            ConverterJSON.writeToJson(queries.listModel.getAllData(), ListModelType.Queries);
+            ConverterJSON.writeToJson(paths.listModel.getAllData(), ListModelType.Paths);
             searchHandler.search();
             answerList.clear();
             answerList.append({"answer": ConverterJSON.getAnswers()});
-            console.log(AlertStates.safely, " ", AlertStates.warning, " ", AlertStates.critical); //delete later
         }
     }
 
@@ -59,7 +58,7 @@ ApplicationWindow {
         customFilter: function(str){
             var result = "";
             for (var x = 0; x < str.length; ++x) {
-                if (str[x] >= 'a' && str[x] <= 'z') {
+                if ((str[x] >= 'a' && str[x] <= 'z') || str[x] === " ") {
                     result += str[x]
                 }
             }
@@ -70,7 +69,7 @@ ApplicationWindow {
         }
 
         Component.onCompleted: {
-            listModel.fillData(0); //replace to ListModelType.queries
+            listModel.fillData(ListModelType.Queries);
         }
     }
 
@@ -132,13 +131,13 @@ ApplicationWindow {
         clearButton.anchors.left: browseDirectory.right
 
         Component.onCompleted: {
-            listModel.fillData(1); //replace to ListModelType.paths
+            listModel.fillData(ListModelType.Paths);
         }
     }
 
     onClosing: { // autosave paths and queries
-        ConverterJSON.writeToJson(queries.listModel.getAllData(), 0); //after enum exposing fix change to ListModelType.queries
-        ConverterJSON.writeToJson(paths.listModel.getAllData(), 1); //after enum exposing fix change to ListModelType.paths
+        ConverterJSON.writeToJson(queries.listModel.getAllData(), ListModelType.Queries);
+        ConverterJSON.writeToJson(paths.listModel.getAllData(), ListModelType.Paths);
     }
 
     Item {
@@ -180,29 +179,66 @@ ApplicationWindow {
         ListView {
             id: answerView
             model: answerList
-            height: parent.height - backGroundAnswers.border.width * 4
-            width: parent.width - backGroundAnswers.border.width * 4
-            spacing: 10
+            height: parent.height - backGroundAnswers.border.width * 2
+            width: parent.width - backGroundAnswers.border.width * 2
             clip: true
             anchors {
                 left: parent.left
                 top: parent.top
-                margins: 10
+                bottom: parent.bottom
+                margins: backGroundAnswers.border.width
             }
+            property int leftAnchorMarginMultiplier: 0
+
 
             ScrollBar.vertical: ScrollBar {
                 id: answerVerticalSlider
                 anchors {
-                    right: answerList.right
-                    top: answerList.top
+                    right: answerView.right
+                    top: answerView.top
                 }
                 width: 15
             }
 
-            delegate: Label {
+            delegate: Label { // answers
                 font.pointSize: 15
                 text: model.answer
                 color: "white"
+                anchors {
+                    left: parent !== null ? parent.left : undefined
+                    top: parent !== null ? parent.top : undefined
+                    leftMargin: parent !== null ?
+                                ((parent.width - width - answerVerticalSlider.width * 2)
+                                 * answerView.leftAnchorMarginMultiplier) / 100
+                                  : 0
+                }
+                onContentSizeChanged: {
+                    if (width < answerView.width) {
+                        answerHorizontalSlider.policy = ScrollBar.AlwaysOff
+                        answerHorizontalSlider.setPosition(0)
+                        anchors.leftMargin = 0
+                    }
+                    answerHorizontalSlider.policy = ScrollBar.AlwaysOn
+                }
+            }
+        }
+
+        ScrollBar {
+            id: answerHorizontalSlider
+            height: 15
+            stepSize: 0.1
+            orientation: Qt.Horizontal
+            policy: ScrollBar.AlwaysOff
+
+            anchors {
+                right: backGroundAnswers.right
+                left: backGroundAnswers.left
+                top: backGroundAnswers.bottom
+                margins: 2
+            }
+
+            onPositionChanged: {
+                answerView.leftAnchorMarginMultiplier = position * 100
             }
         }
     }
@@ -294,7 +330,7 @@ ApplicationWindow {
             }
         }
         Component.onCompleted: {
-            alertList.append("file is not found", AlertStates.warning);
+            alertList.append("file is not found", AlertStates.Warning);
         }
     }
 }

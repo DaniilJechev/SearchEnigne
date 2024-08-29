@@ -16,9 +16,9 @@ namespace AlertStates {
     Q_NAMESPACE
 
     enum AlertState {
-        safely = 0,
-        warning = 1,
-        critical = 2
+        Safely = 0,
+        Warning = 1,
+        Critical = 2
     };
     Q_ENUM_NS(AlertState)
 }
@@ -27,8 +27,8 @@ namespace ListModelType {
     Q_NAMESPACE
 
     enum ListModelType{
-        queries,
-        paths
+        Queries,
+        Paths
     };
     Q_ENUM_NS(ListModelType);
 }

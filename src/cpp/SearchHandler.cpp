@@ -15,6 +15,3 @@ void SearchHandler::search() {
                                  ConverterJSON::getResponsesLimit(global::jsonDir));
     ConverterJSON::putAnswers(answers, global::jsonDir, queries);
 }
-
-
-#include "moc_searchHandler.cpp"

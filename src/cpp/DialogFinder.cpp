@@ -23,5 +23,3 @@ QString DialogFinder::openDirDialog() {
     }
     return pathToDir;
 }
-
-#include "moc_DialogFinder.cpp"

@@ -19,6 +19,7 @@ public:
     [[nodiscard]] QVariant data (const QModelIndex& idx, int role) const override;
     [[nodiscard]] Qt::ItemFlags flags(const QModelIndex &idx) const override;
     [[nodiscard]] QHash <int, QByteArray> roleNames() const override;
+
     Q_INVOKABLE void appendMessage(const QString &message);
     Q_INVOKABLE void remove(qsizetype idxStart, qsizetype countToDelete = 1);
     Q_INVOKABLE void fillData(int listModelType);

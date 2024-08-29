@@ -3,6 +3,15 @@
 #include "ConverterJSON.h"
 #include "globals.h"
 
+bool MyWindowListModel::setData(const QModelIndex &idx, const QVariant &value, int role) {
+    if (idx.isValid() && role == message && m_data[idx.row()] != value.toString()) {
+        m_data[idx.row()] = value.toString();
+        emit dataChanged(idx, idx, QList<int>() << role);
+        return true;
+    }
+    return false;
+}
+
 int MyWindowListModel::rowCount(const QModelIndex &idx) const {
     if (!idx.isValid()) {
         return static_cast<int>(m_data.size());
@@ -21,15 +30,6 @@ QVariant MyWindowListModel::data(const QModelIndex& idx, int role) const{
     }
 
     return {};
-}
-
-bool MyWindowListModel::setData(const QModelIndex &idx, const QVariant &value, int role) {
-    if (idx.isValid() && role == message && m_data[idx.row()] != value.toString()) {
-        m_data[idx.row()] = value.toString();
-        emit dataChanged(idx, idx, QList<int>() << role);
-        return true;
-    }
-    return false;
 }
 
 Qt::ItemFlags MyWindowListModel::flags(const QModelIndex &idx) const {
@@ -63,7 +63,7 @@ void MyWindowListModel::remove(qsizetype idxStart, qsizetype countToDelete)
 void MyWindowListModel::fillData(int listModelType) {
     std::vector<std::string> data;
     switch(listModelType){
-        case ListModelType::queries:
+        case ListModelType::Queries:
             data = ConverterJSON::getRequests(global::jsonDir);
             if (data.size() == 0) break;
             beginInsertRows(QModelIndex(), 0, data.size() - 1);
@@ -73,7 +73,7 @@ void MyWindowListModel::fillData(int listModelType) {
             endInsertRows();
             break;
 
-        case ListModelType::paths:
+        case ListModelType::Paths:
             data = ConverterJSON::getPaths(global::jsonDir);
             if (data.size() == 0) break;
             beginInsertRows(QModelIndex(), 0, data.size() - 1);
@@ -91,5 +91,3 @@ void MyWindowListModel::fillData(int listModelType) {
 QList<QString> MyWindowListModel::getAllData() {
     return m_data;
 }
-
-#include "moc_MyWindowListModel.cpp"

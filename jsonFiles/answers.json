@@ -28,7 +28,13 @@
         "result": true
     },
     "request002": {
-        "queryText": "hello",
-        "result": false
+        "queryText": "hello world",
+        "relevance": {
+            "DocId_2": {
+                "pathToFile": "D:/test\\test2\\test.txt",
+                "rank": 1.0
+            }
+        },
+        "result": true
     }
 }

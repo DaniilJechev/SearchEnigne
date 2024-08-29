@@ -164,7 +164,7 @@ std::vector<std::string> ConverterJSON::getPaths(const fs::path &jsonDir) {
     return requests;
 }
 
-std::string createRequestName(int requestId) {
+std::string ConverterJSON::createRequestName(int requestId) {
     std::string requestName = "request";
     if (requestId / 10 == 0) {
         requestName += "00" + std::to_string(requestId);
@@ -182,7 +182,7 @@ ConverterJSON::putAnswers(const std::vector<std::vector<RelativeIndex>> &relativ
     int requestId = 0;
 
     for (const auto &it: relativeIndexes) {
-        std::string requestIdStr = createRequestName(requestId);
+        std::string requestIdStr = ConverterJSON::createRequestName(requestId);
         answerData[requestIdStr]["result"] = !it.empty();
         for (const auto &it2: it) {
             answerData[requestIdStr]["relevance"]["DocId_" + std::to_string(it2.m_docId)] =
@@ -211,12 +211,12 @@ void ConverterJSON::writeToJson(const QList<QString> &data, int listModelType) {
     std::string jsonFileName;
     std::string jsonArrName;
     switch (listModelType) {
-        case ListModelType::queries:
+        case ListModelType::Queries:
             jsonFileName = "requests.json";
             jsonArrName = "requests";
             break;
 
-        case ListModelType::paths:
+        case ListModelType::Paths:
             jsonFileName = "config.json";
             jsonArrName = "paths";
             break;
@@ -247,8 +247,17 @@ QString ConverterJSON::getAnswers() {
     std::ifstream file(global::jsonDir / "answers.json");
     file >> data;
     std::string strAnswers = data.dump(4);
+    // visually separate answers
+    int requestId = 1;
+    std::string requestIdStr = '"' + ConverterJSON::createRequestName(requestId) + '"';
+    std::string separatorAndDump = std::string(40, '-') + "\n    ";
+    while (strAnswers.find(requestIdStr) != std::string::npos) {
+        int pos = strAnswers.find(requestIdStr);
+        strAnswers.insert(pos, separatorAndDump);
+        requestId++;
+        requestIdStr = '"' + ConverterJSON::createRequestName(requestId) + '"';
+    }
+
     strAnswers = strAnswers.substr(1, strAnswers.size() - 2); // delete outmost curly brackets
     return QString::fromStdString(strAnswers);
 }
-
-#include "moc_ConverterJSON.cpp"
