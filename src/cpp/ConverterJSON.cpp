@@ -130,10 +130,24 @@ std::vector<DocumentInfo> ConverterJSON::getTextsFromDir(const fs::path &dir, bo
 
 int ConverterJSON::getResponsesLimit(const fs::path &jsonDir) {
     nlohmann::json configData;
-    std::string path = jsonDir.string();
-    std::ifstream config(jsonDir.string() + "config.json");
+    std::ifstream config(jsonDir / "config.json");
     config >> configData;
+    config.close();
+
     return configData["config"]["max_responses"];
+}
+
+void ConverterJSON::setResponsesLimit(int maxResponses, const fs::path &jsonDir) {
+    nlohmann::json configData;
+    std::ifstream configReading(jsonDir / "config.json");
+
+    configReading >> configData;
+    configData["config"]["max_responses"] = maxResponses;
+    configReading.close();
+
+    std::ofstream configWriting(jsonDir / "config.json");
+    configWriting << configData.dump(4);
+    configWriting.close();
 }
 
 std::vector<std::string> ConverterJSON::getRequests(const fs::path &jsonDir) {

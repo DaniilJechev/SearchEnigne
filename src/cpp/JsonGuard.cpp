@@ -88,7 +88,6 @@ void checkRequests() {
                                      "\nWrong query: " + to_string(it));
         }
 
-        int wordCnt = 0;
         std::string query = it, word;
         std::stringstream stream(query);
         while (stream >> word) {
@@ -98,14 +97,7 @@ void checkRequests() {
                                              "\nWrong query: " + query);
                 }
             }
-            ++wordCnt;
         }
-
-        if (wordCnt > 10) {
-            throw std::runtime_error("query in \"requests.json\" can contain maximum 10 words. "
-                                     "\nWrong query: " + query);
-        }
-        ++queryCnt;
     }
 
     if (queryCnt > 1000) {

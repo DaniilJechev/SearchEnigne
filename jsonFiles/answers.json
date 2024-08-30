@@ -1,11 +1,7 @@
 {
     "request000": {
-        "queryText": "capital",
+        "queryText": "the",
         "relevance": {
-            "DocId_0": {
-                "pathToFile": "D:\\SearchEngineProject\\resources/file001.txt",
-                "rank": 0.6666666865348816
-            },
             "DocId_1": {
                 "pathToFile": "D:\\SearchEngineProject\\resources/file002.txt",
                 "rank": 1.0
@@ -14,24 +10,20 @@
         "result": true
     },
     "request001": {
-        "queryText": "the",
+        "queryText": "hello world",
         "relevance": {
-            "DocId_0": {
-                "pathToFile": "D:\\SearchEngineProject\\resources/file001.txt",
-                "rank": 0.5
-            },
-            "DocId_1": {
-                "pathToFile": "D:\\SearchEngineProject\\resources/file002.txt",
+            "DocId_2": {
+                "pathToFile": "D:/test\\test2\\test.txt",
                 "rank": 1.0
             }
         },
         "result": true
     },
     "request002": {
-        "queryText": "hello world",
+        "queryText": "capital",
         "relevance": {
-            "DocId_2": {
-                "pathToFile": "D:/test\\test2\\test.txt",
+            "DocId_1": {
+                "pathToFile": "D:\\SearchEngineProject\\resources/file002.txt",
                 "rank": 1.0
             }
         },

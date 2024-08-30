@@ -9,6 +9,7 @@ import ConverterJSON
 import ListModelType
 
 ApplicationWindow {
+    id: mainWindow
     visible: true
     maximumWidth: 1366
     minimumWidth: 1366
@@ -19,6 +20,7 @@ ApplicationWindow {
     property color standardTextColor: "white"
 
     Rectangle {
+        id: backGroundMainWindow
         anchors.fill: parent
         color: windowColor
     }
@@ -45,6 +47,96 @@ ApplicationWindow {
         }
     }
 
+    MyButton {
+        id: openSetings
+        width: 70
+        buttonText: "Setings"
+        fontPointSize: 12
+        anchors {
+            top: parent.top
+            right: parent.right
+            bottom: queries.top
+            margins: 10
+        }
+
+        onClickedFoo: {
+            settingDialog.open();
+        }
+    }
+
+    Dialog {
+        id: settingDialog
+        width: 355
+        height: 120
+        modal: true
+        anchors.centerIn: parent
+
+        background: Rectangle {
+            anchors.fill: parent
+            color: windowColor
+        }
+
+        footer: Rectangle {
+            width: parent.width
+            height: parent.height / 2.5
+            color: windowColor
+
+            RowLayout {
+                anchors.centerIn: parent
+                spacing: 30
+
+                MyButton {
+                    id: apply
+                    width: 80
+                    height: 35
+                    buttonText: "Apply"
+                    fontPointSize: 12
+                    onClickedFoo: {
+                        ConverterJSON.setResponsesLimit(maxResponsesSpinbox.value);
+                        settingDialog.close();
+                    }
+                }
+
+                MyButton {
+                    id: close
+                    width: 80
+                    height: 35
+                    buttonText: "Close"
+                    fontPointSize: 12
+                    onClickedFoo: {
+                        settingDialog.close();
+                    }
+                }
+            }
+        }
+
+        Column {
+            anchors.fill: parent
+            spacing: 40
+
+            RowLayout {
+                width: parent.width
+                spacing: 30
+
+                Label {
+                    width: 50
+                    height: 50
+                    font.pointSize: 16
+                    text: "Max responses: "
+                }
+
+                SpinBox {
+                    id: maxResponsesSpinbox
+                    width: 120
+                    height: 80
+                    editable: true
+                    from: 1
+                    value: ConverterJSON.getResponsesLimit()
+                }
+            }
+        }
+    }
+
     MyWindow {
         id: queries
         anchors.left: parent.left
@@ -62,9 +154,11 @@ ApplicationWindow {
                     result += str[x]
                 }
             }
+
             if (result.length < str.length){
                 console.log("Queries must contain only lower-case letters");
             }
+
             return result;
         }
 
@@ -208,9 +302,8 @@ ApplicationWindow {
                     left: parent !== null ? parent.left : undefined
                     top: parent !== null ? parent.top : undefined
                     leftMargin: parent !== null ?
-                                ((parent.width - width - answerVerticalSlider.width * 2)
-                                 * answerView.leftAnchorMarginMultiplier) / 100
-                                  : 0
+                                    ((parent.width - width - answerVerticalSlider.width * 2)
+                                     * answerView.leftAnchorMarginMultiplier) / 100 : 0
                 }
                 onContentSizeChanged: {
                     if (width < answerView.width) {
@@ -289,7 +382,6 @@ ApplicationWindow {
                 return "white"; // default color
             }
         }
-
 
         AlertModel {
             id: alertList

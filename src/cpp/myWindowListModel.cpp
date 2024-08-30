@@ -3,6 +3,8 @@
 #include "ConverterJSON.h"
 #include "globals.h"
 
+#include <sstream>
+
 bool MyWindowListModel::setData(const QModelIndex &idx, const QVariant &value, int role) {
     if (idx.isValid() && role == message && m_data[idx.row()] != value.toString()) {
         m_data[idx.row()] = value.toString();

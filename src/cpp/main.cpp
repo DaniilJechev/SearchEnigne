@@ -75,7 +75,7 @@ int main(int argc, char **argv) {
         engine.addImportPath(":/");
         engine.load(url);
 
-        try {
+        try { // try to 'guardWrapper' class
             checkConfig();
             checkRequests();
             checkAnswers();

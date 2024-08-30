@@ -8,7 +8,8 @@
 #include <QObject>
 #include <QList>
 #include <QString>
-#include <QString>
+
+#include "globals.h"
 
 struct DocumentInfo { // for reading txt filex
     std::string m_docText, m_pathToDoc;
@@ -52,15 +53,16 @@ public:
     void operator=(const ConverterJSON &other) = delete;
     static ConverterJSON *getInstance();
 
-    static std::vector<DocumentInfo> getTextDocuments(const fs::path &jsonDir,
-                                                     const fs::path &resourcesDir);
-    static int getResponsesLimit(const fs::path &jsonDir);
-    static std::vector<std::string> getRequests(const fs::path &jsonDir);
-    static std::vector<std::string> getPaths(const fs::path &jsonDir);
+    static std::vector<DocumentInfo> getTextDocuments(const fs::path &jsonDir = global::jsonDir,
+                                                      const fs::path &resourcesDir = global::resourcesDir);
+    static std::vector<std::string> getRequests(const fs::path &jsonDir = global::jsonDir);
+    static std::vector<std::string> getPaths(const fs::path &jsonDir = global::jsonDir);
     static void putAnswers(const std::vector<std::vector<RelativeIndex>> &relativeIndexes,
-                           const fs::path &jsonDir, const std::vector<std::string>& queries);
-    static std::string getRunMode(const fs::path &jsonDir);
+                           const fs::path &jsonDir = global::jsonDir, const std::vector<std::string>& queries = {});
+    static std::string getRunMode(const fs::path &jsonDir = global::jsonDir);
 
+    Q_INVOKABLE static int getResponsesLimit(const fs::path &jsonDir = global::jsonDir);
+    Q_INVOKABLE static void setResponsesLimit(int maxResponses, const fs::path &jsonDir = global::jsonDir);
     Q_INVOKABLE static void writeToJson(const QList<QString> &data, int listModelType);
     Q_INVOKABLE static QString getAnswers();
 
@@ -70,5 +72,5 @@ private:
     static std::vector<DocumentInfo> getTextsFromDir(const fs::path& dir, bool checkSubdirs);
     static bool isStarTerminated(const fs::path& dir);
     static bool isTxtOrDirectory(const fs::path& path);
-    static bool pathGuard(fs::path& path, const fs::path &resourcesDir);
+    static bool pathGuard(fs::path& path, const fs::path &resourcesDir = global::resourcesDir);
 };
