@@ -3,5 +3,6 @@
         <file>main.qml</file>
         <file>MyButton.qml</file>
         <file>MyWindow.qml</file>
+        <file>MyButtonWithIcon.qml</file>
     </qresource>
 </RCC>

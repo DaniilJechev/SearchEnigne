@@ -6,6 +6,7 @@
 #include <QQmlContext>
 #include <QQmlEngine>
 #include <QString>
+#include <QIcon>
 #include <QtQuickControls2/QQuickStyle>
 
 #include "ConverterJSON.h"
@@ -33,6 +34,7 @@ int main(int argc, char **argv) {
     } else {
         QQuickStyle::setStyle("Universal");
         QApplication app(argc, argv);
+        app.setWindowIcon(QIcon(":/icons/appIcon"));
 
         QQmlApplicationEngine engine;
         QString mainQmlPath = QString::fromStdString(global::mainQmlFile.string());
@@ -75,7 +77,7 @@ int main(int argc, char **argv) {
         engine.addImportPath(":/");
         engine.load(url);
 
-        try { // try to 'guardWrapper' class
+        try { // try 'guardWrapper' class
             checkConfig();
             checkRequests();
             checkAnswers();

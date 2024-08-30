@@ -1,6 +1,6 @@
 {
     "config": {
-        "max_responses": 1,
+        "max_responses": 3,
         "name": "SkillboxSearchEngine",
         "runMode": "application",
         "version": "0.1"
@@ -8,7 +8,6 @@
     "paths": [
         "file001.txt",
         "file002.txt",
-        "D:/test*",
-        "non-existFile"
+        "D:/test*"
     ]
 }

@@ -47,16 +47,14 @@ ApplicationWindow {
         }
     }
 
-    MyButton {
+    MyButtonWithIcon {
         id: openSetings
         width: 70
-        buttonText: "Setings"
-        fontPointSize: 12
+        pathToIcon: "qrc:/icons/gearIcon"
         anchors {
             top: parent.top
             right: parent.right
             bottom: queries.top
-            margins: 10
         }
 
         onClickedFoo: {

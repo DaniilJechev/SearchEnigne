@@ -29,7 +29,7 @@ set(CMAKE_AUTOUIC ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick QuickControls2 Widgets)
 
-add_executable(SearchEngine ${Src} qml/qml.qrc)
+add_executable(SearchEngine ${Src} qml/qml.qrc ../resources/icons.qrc)
 
 target_link_libraries(SearchEngine
         nlohmann_json::nlohmann_json
