@@ -6,7 +6,7 @@ Relevance index is value which show to the user the probability of successful fi
 Search engine has a 2 run modes:
 ## Application mode
 This is default run mode. \
-But for switching Search engine to the application mode, you should go to `config.json` file in `jsonFiles` directory and set the `runMode` value to `application`:
+But for switching Search engine to the application mode, you should go to `config.json` file in `jsonFiles` directory and set the `runMode` value to `application`:\
 ![text](resources/readmeAssets/2.png)
 \
 \
@@ -36,10 +36,11 @@ Also, **user can create a relative paths to files**, if they place in project di
 For example, `file001.txt` and `file002.txt` initially place in `resource` directory, consequently, user can piont relative path to them.
 
 ### Answers window
-![answer window](resources/readmeAssets/5.png)
-That's a _read-only_ window, with no opportunity to redact. But has horizontal and vertical slider for navigation.\
+![answer window](resources/readmeAssets/5.png)\
+That's a _read-only_ window, with no opportunity to edit. But has horizontal and vertical slider for navigation.\
 
-If searching was successful user can see the list of answers to his queries with this structure:
+#### json Structure
+If searching was successful user can see the list of answers to requests with this structure:
 ```json
 "request<ID>": {
     "queryText": "someText",
@@ -72,7 +73,7 @@ To get there, click on the gear icon in the upper right corner of application:\
 
 
 ## Console mode
-For switching Search engine to the application mode, you should go to `config.json` file in `jsonFiles` directory and set the `runMode` value to `console`:
+For switching Search engine to the application mode, you should go to `config.json` file in `jsonFiles` directory and set the `runMode` value to `console`:\
 ![console mode switching](resources/readmeAssets/6.png) 
 
 ### Console mode actions consequence
