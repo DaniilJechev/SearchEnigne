@@ -1,7 +1,7 @@
 {
     "config": {
-        "max_responses": 3,
-        "name": "SkillboxSearchEngine",
+        "max_responses": 5,
+        "name": "SearchEngine",
         "runMode": "application",
         "version": "0.1"
     },

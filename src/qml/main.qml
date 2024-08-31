@@ -90,6 +90,8 @@ ApplicationWindow {
                     buttonText: "Apply"
                     fontPointSize: 12
                     onClickedFoo: {
+                        maxResponsesSpinbox.forceActiveFocus();
+                        maxResponsesSpinbox.focus = false;
                         ConverterJSON.setResponsesLimit(maxResponsesSpinbox.value);
                         settingDialog.close();
                     }

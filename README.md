@@ -1,5 +1,87 @@
 # SearchEngine
-- add the `*` to the end of your directory path and SearchEngine will process all subdirectories into your pointed directory
-- the `runMode` key in **config.json** is responsible for the application run mode
-  - **application** - visual mode (default value)
-  - **console** - console mode
+This search engine read input queries and paths and creates a table with relevance index for each file in path.\
+Relevance index is value which show to the user the probability of successful finding of the request
+\
+\
+Search engine has a 2 run modes:
+## Application mode
+This is default run mode. \
+But for switching Search engine to the application mode, you should go to `config.json` file in `jsonFiles` directory and set the `runMode` value to `application`:
+![text](resources/readmeAssets/2.png)
+\
+\
+**Appearance** of `application` mode:
+![](resources/readmeAssets/1.png)
+Adventages of `applciation` mode: 
+- User-friendly and intuitive interface
+- Allow user to input queries and paths without interaction with `.json` files
+
+### Queries window
+![queriesWindow](resources/readmeAssets/3.png)
+- `+` : add empty request
+- `-` : delete particular rquest
+- `clear` : delete all requests.
+
+### Paths window
+![](resources/readmeAssets/4.png)
+- `+` : add empty path
+- `-` : delete particular path.
+- `clear` : delete all paths.
+- `Browse file` : choose local file with `.txt` extend
+- `Browse directory` : choose local directory. 
+	- If you add the `*` in the end of directory path, program will check all subdirectories on containing `.txt` files. (Defaultly `*` added to the end of path to directory)
+	- If `*` isn't added to the end of directory path, program will check content only in pointed directory, without entering to subdirectories.
+
+Also, **user can create a relative paths to files**, if they place in project directory `resources`.\
+For example, `file001.txt` and `file002.txt` initially place in `resource` directory, consequently, user can piont relative path to them.
+
+### Answers window
+![answer window](resources/readmeAssets/5.png)
+That's a _read-only_ window, with no opportunity to redact. But has horizontal and vertical slider for navigation.\
+
+If searching was successful user can see the list of answers to his queries with this structure:
+```json
+"request<ID>": {
+    "queryText": "someText",
+    "relevance": { // list of paths to files with the highest ranks
+        "DocId_<ID>": {
+            "pathToFile": "absolute/path/to/your/file.txt",
+            "rank": 0.5
+        },
+        "DocId_<ID>": {
+	        //the same
+        }
+    },
+    "result": true // result has been found
+},
+```
+If searching procces has been finished with no results, the `relevance` field won't exist:
+``` json
+"request002": {
+	"queryText": "someText",
+	"result": false // result has not been found
+}
+```
+
+### Alert window
+- earlier
+### Settings
+To get there, click on the gear icon in the upper right corner of application:\
+![settings](resources/readmeAssets/7.png)
+- **Max responses** - variable which responsible for the count of showed paths to files with highest ranks in `relevance` field.
+
+
+## Console mode
+For switching Search engine to the application mode, you should go to `config.json` file in `jsonFiles` directory and set the `runMode` value to `console`:
+![console mode switching](resources/readmeAssets/6.png) 
+
+### Console mode actions consequence
+In `console` mode, program do only these steps and ultimately close:
+- Read **queries** from `requests.json` 
+- Read **paths** and **max_responses** variable from `config.json`
+- Search answers
+- Write answers in `answers.json`.
+
+### Editing json files 
+- For Inputting new paths to files, open the `config.json` file in `jsonFiles` directory and enter new paths into `paths` array. Feature with `*` from `Paths window` works the same way.
+- For inputting new queries , open the `requests.json` file in `jsonFiles` directory and enter new queries into the `requests` array.
