@@ -19,7 +19,7 @@ Adventages of `applciation` mode:
 ### Queries window
 ![queriesWindow](resources/readmeAssets/3.png)
 - `+` : add empty request
-- `-` : delete particular rquest
+- `-` : delete particular request
 - `clear` : delete all requests.
 
 ### Paths window
