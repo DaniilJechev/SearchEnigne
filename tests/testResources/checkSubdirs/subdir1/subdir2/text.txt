@@ -1,1 +1,1 @@
-text.txt in subdir2
+text txt in subdir2

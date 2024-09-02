@@ -86,7 +86,7 @@ std::vector<DocumentInfo> ConverterJSON::getTextDocuments(const fs::path &jsonDi
                                                          const fs::path &resourcesDir) {
     std::vector<DocumentInfo> textDocuments;
     nlohmann::json configData;
-    std::ifstream config(jsonDir.string() + "config.json");
+    std::ifstream config(jsonDir / "config.json");
 
     config >> configData; //read all paths
     for (const auto &it: configData["paths"]) {

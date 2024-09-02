@@ -1,8 +1,8 @@
 {
   "requests": [
-    "Hello world",
-    "How to cook",
-    "text.txt in subdir2",
+    "hello world",
+    "how to cook",
+    "text txt in subdir2",
     "inaccessible dir"
   ]
 }

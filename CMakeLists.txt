@@ -7,6 +7,7 @@ set(MY_INCLUDE_DIR
         ${CMAKE_SOURCE_DIR}/include
         )
 set(MY_SRC/CPP_DIR ${CMAKE_SOURCE_DIR}/src/cpp)
+set(MY_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
 
 include(FetchContent)
 
@@ -26,4 +27,4 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 enable_testing()
 
 add_subdirectory(src)
-#add_subdirectory(tests)
+add_subdirectory(tests)

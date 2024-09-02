@@ -14,7 +14,7 @@
 struct DocumentInfo { // for reading txt filex
     std::string m_docText, m_pathToDoc;
 
-    DocumentInfo(const std::string &docText, const std::string &pathToDoc) :
+    DocumentInfo(const std::string &docText, const std::string &pathToDoc = "") :
             m_docText(docText), m_pathToDoc(pathToDoc){}
 };
 
@@ -22,7 +22,7 @@ struct Entry { // for invertedIndex dictionary
     size_t m_docId, m_count;
     std::string m_pathToFile;
 
-    Entry(size_t docId, size_t count, std::string pathToFile)
+    Entry(size_t docId, size_t count, std::string pathToFile = "")
             : m_docId(docId), m_count(count), m_pathToFile(std::move(pathToFile)) {};
 
     bool operator==(const Entry &other) const;
@@ -35,7 +35,7 @@ struct RelativeIndex { // for answers to queries
 
     bool operator==(const RelativeIndex &other) const;
     RelativeIndex() = default;
-    RelativeIndex(size_t docId, float rank, const std::string& pathToFile) :
+    RelativeIndex(size_t docId, float rank, const std::string& pathToFile = "") :
             m_docId(docId), m_rank(rank), m_pathToFile(pathToFile) {};
 };
 
