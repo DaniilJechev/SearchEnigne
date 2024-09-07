@@ -110,3 +110,14 @@ void checkAnswers() {
     answers.clear();
     answers.close();
 }
+
+QString GuardWrapper::checkData() {
+    try {
+        checkConfig();
+        checkRequests();
+        checkAnswers();
+    } catch (const std::exception &e) {
+        return e.what();
+    }
+    return "";
+}

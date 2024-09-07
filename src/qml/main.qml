@@ -19,6 +19,54 @@ ApplicationWindow {
     property color windowColor: "#7d7d7d"
     property color standardTextColor: "white"
 
+    Component.onCompleted: {
+        criticAlertHandler.checkOnAlerts()
+    }
+
+    Item {
+        id: criticAlertHandler
+        anchors.centerIn: parent // for criticAlertDialog centring
+        signal getCriticAlert(string criticAlert);
+
+        onGetCriticAlert: criticAlert => {
+            criticAlertDialog.alertText = criticAlert
+            console.log(criticAlert)
+            criticAlertDialog.open();
+        }
+
+        function checkOnAlerts(){
+            var criticAlert = guardWrapper.checkData().toString()
+            if (criticAlert.length !== 0) {
+                console.log(criticAlert)
+                getCriticAlert(criticAlert)
+            }
+        }
+
+        Dialog {
+            id: criticAlertDialog
+            width: 355
+            height: 250
+            modal: true
+            property string alertText: ""
+            anchors.centerIn: parent
+            standardButtons: Dialog.Ok
+
+            Text {
+                id: myText
+                text: criticAlertDialog.alertText
+                wrapMode: Text.WordWrap
+                font.pointSize: 14
+                anchors {
+                    centerIn: parent
+                    fill: parent
+                }
+            }
+
+            onClosed: Qt.quit();
+        }
+    }
+
+
     Rectangle {
         id: backGroundMainWindow
         anchors.fill: parent
@@ -370,15 +418,15 @@ ApplicationWindow {
 
         QtObject {
             id: colorDefinitions
-            property var alertStatus: ({
+            property var alertColors: ({
                 safely: "white",
                 warning: "#e6e600",
                 critical: "red"
             })
             function getColor (status) {
-                if (status === AlertStates.safely) return alertStatus.safely;
-                if (status === AlertStates.warning) return alertStatus.warning;
-                if (status === AlertStates.critical) return alertStatus.critical;
+                if (status === AlertStates.Safely) return alertColors.safely;
+                if (status === AlertStates.Warning) return alertColors.warning;
+                if (status === AlertStates.Critical) return alertStatus.critical;
                 return "white"; // default color
             }
         }
@@ -420,9 +468,10 @@ ApplicationWindow {
                     color: colorDefinitions.getColor(model.status);
                 }
             }
-        }
-        Component.onCompleted: {
-            alertList.append("file is not found", AlertStates.Warning);
+
+            onCountChanged: {
+                alertView.positionViewAtIndex(alertList.rowCount() - 1, alertView.End);
+            }
         }
     }
 }

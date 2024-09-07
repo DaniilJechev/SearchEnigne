@@ -1,6 +1,14 @@
 #include "AlertModel.h"
-#include "globals.h"
+#include "QAbstractListModel"
 
+AlertModel::AlertModel(QObject *parent)
+    : QAbstractListModel(parent), m_data(*AlertData::getInstance()) {
+    m_data.raiseModelExists();
+    QObject::connect(AlertData::getInstance(), &AlertData::startAppend,
+                     this, &AlertModel::beginInsertRowsSlot);
+    QObject::connect(AlertData::getInstance(), &AlertData::endAppend,
+                     this, &AlertModel::endInsertRowsSlot);
+}
 
 bool AlertModel::setData(const QModelIndex &idx, const QVariant &value, int role) {
     if (idx.isValid()) {
@@ -18,7 +26,7 @@ bool AlertModel::setData(const QModelIndex &idx, const QVariant &value, int role
 }
 
 int AlertModel::rowCount(const QModelIndex &idx) const {
-    if (idx.isValid()) {
+    if (!idx.isValid()) {
         return static_cast<int>(m_data.size());
     }
     return 0;
@@ -30,10 +38,10 @@ QVariant AlertModel::data(const QModelIndex &idx, int role) const {
     }
     switch (role) {
         case message:
-        return m_data.at(idx.row()).m_message;
+        return m_data[idx.row()].m_message;
 
         case status:
-            return m_data.at(idx.row()).m_status;
+            return m_data[idx.row()].m_status;
 
         default:
             return {};
@@ -41,9 +49,6 @@ QVariant AlertModel::data(const QModelIndex &idx, int role) const {
 }
 
 Qt::ItemFlags AlertModel::flags(const QModelIndex &idx) const {
-//    if (idx.isValid()) {
-//        return Qt::ItemIsEnabled;
-//    }
     return Qt::NoItemFlags;
 }
 
@@ -56,6 +61,14 @@ QHash<int, QByteArray> AlertModel::roleNames() const {
 
 void AlertModel::append(const QString& message, int status) {
     beginInsertRows(QModelIndex(), m_data.size(), m_data.size());
-    m_data.append({message, status});
+    AlertData::appendAlert(message.toStdString(), status);
+    endInsertRows();
+}
+
+void AlertModel::beginInsertRowsSlot(int first, int last, const QModelIndex &parent) {
+    beginInsertRows(parent, first, last);
+}
+
+void AlertModel::endInsertRowsSlot() {
     endInsertRows();
 }

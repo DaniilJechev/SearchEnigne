@@ -10,6 +10,7 @@ set(Src
         "cpp/SearchHandler.cpp"
         "cpp/AlertModel.cpp"
         "cpp/DialogFinder.cpp"
+        "cpp/AlertData.cpp"
         "../include/globals.h"
         "../include/SearchServer.h"
         "../include/InvertedIndex.h"
@@ -19,6 +20,7 @@ set(Src
         "../include/SearchHandler.h"
         "../include/AlertModel.h"
         "../include/DialogFinder.h"
+        "../include/AlertData.h"
 )
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR})
@@ -29,7 +31,11 @@ set(CMAKE_AUTOUIC ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick QuickControls2 Widgets)
 
-add_executable(SearchEngine ${Src} qml/qml.qrc ../resources/icons.qrc)
+add_executable(SearchEngine
+    ${Src}
+    qml/qml.qrc
+    ../resources/icons.qrc
+)
 
 target_link_libraries(SearchEngine
         nlohmann_json::nlohmann_json

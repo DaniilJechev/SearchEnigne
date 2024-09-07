@@ -13,7 +13,7 @@ QString DialogFinder::openFileDialog() {
             return selectedFiles.first();
         }
     }
-    return "";  // Return empty string if no selection is made
+    return "";  // Return empty string if no selection was made
 }
 
 QString DialogFinder::openDirDialog() {

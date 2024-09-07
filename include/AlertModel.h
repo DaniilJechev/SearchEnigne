@@ -5,12 +5,7 @@
 #include <QList>
 #include <QString>
 
-struct AlertItem {
-    QString m_message;
-    int m_status;
-    AlertItem (const QString &message, int status):
-        m_message(message), m_status(status){};
-};
+#include "AlertData.h"
 
 class AlertModel: public QAbstractListModel {
     Q_OBJECT
@@ -21,7 +16,7 @@ public:
         status
     };
 
-    explicit AlertModel(QObject* parent = nullptr): QAbstractListModel(parent){}
+    explicit AlertModel(QObject* parent = nullptr);
 
     bool setData(const QModelIndex& idx, const QVariant& value, int role) override;
     [[nodiscard]] int rowCount (const QModelIndex& idx) const override;
@@ -31,6 +26,10 @@ public:
 
     Q_INVOKABLE void append(const QString& message, int status);
 
+public slots:
+    void beginInsertRowsSlot(int first, int last, const QModelIndex& parent);
+    void endInsertRowsSlot();
+
 private:
-    QList<AlertItem> m_data;
+    AlertData& m_data;
 };

@@ -20,17 +20,17 @@
 int main(int argc, char **argv) {
     std::string runMode = ConverterJSON::getRunMode(global::jsonDir);
     SearchHandler searchHandler;
+    GuardWrapper guardWrapper;
+
     if (runMode == "console") {
-        try {
-            checkConfig();
-            checkRequests();
-            checkAnswers();
-        } catch (const std::exception &e) {
-            std::cerr << e.what();
+        std::string alert = guardWrapper.checkData().toStdString();
+        if (!alert.empty()) {
+            std::cerr << alert;
             return -1;
         }
         searchHandler.search();
         return 0;
+
     } else {
         QQuickStyle::setStyle("Universal");
         QApplication app(argc, argv);
@@ -51,6 +51,7 @@ int main(int argc, char **argv) {
         DialogFinder dialogFinder;
         engine.rootContext()->setContextProperty("dialogFinder", &dialogFinder);
         engine.rootContext()->setContextProperty("searchHandler", &searchHandler);
+        engine.rootContext()->setContextProperty("guardWrapper", &guardWrapper);
         qmlRegisterSingletonType<ConverterJSON>("ConverterJSON", 1, 0, "ConverterJSON",
                                                 [](QQmlEngine *, QJSEngine *) -> QObject * {
                                                     return ConverterJSON::getInstance();
@@ -77,19 +78,7 @@ int main(int argc, char **argv) {
         engine.addImportPath(":/");
         engine.load(url);
 
-        try { // try 'guardWrapper' class
-            checkConfig();
-            checkRequests();
-            checkAnswers();
-        } catch (const std::exception &e) {
-            std::cerr << e.what();
-            return -1;
-        }
-
-        if (engine.rootObjects().isEmpty()) {
-            return -1;
-        }
-
         return app.exec();
     }
 }
+

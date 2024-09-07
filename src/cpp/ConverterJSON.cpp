@@ -10,6 +10,7 @@
 
 #include "nlohmann/json.hpp"
 #include "globals.h"
+#include "AlertData.h"
 
 namespace fs = std::filesystem;
 
@@ -60,22 +61,22 @@ bool ConverterJSON::isTxtOrDirectory(const fs::path &path) {
 
 bool ConverterJSON::pathGuard(fs::path &path, const fs::path &resourcesDir) {
     if (path.empty()) {
-        std::cerr << R"(One of your paths is empty or contain only special signs, like "*")"
-                  << std::endl;
+        AlertData::appendAlert("One of your paths is empty or contain only special signs, like \"*\" \n",
+                               AlertStates::Warning);
         return false;
     }
     if (path.is_relative()) {
         path = resourcesDir / path;
     }
     if (!ConverterJSON::isTxtOrDirectory(path)) {
-        std::cerr << "Path \"" + path.string() + R"(" does not lead to a directory or ".txt" file)"
-                  << std::endl;
+        AlertData::appendAlert("Path \"" + path.string() + " does not lead to a directory or \".txt\" file \n",
+                               AlertStates::Warning);
         return false;
     }
     if (!exists(path)) { //error
-        std::cerr << ((is_regular_file(path)) ? "File \"" : "Dir \"")
-                  << absolute(path).string() << R"(" is not exist)"
-                  << std::endl;
+        AlertData::appendAlert((is_regular_file(path) ? "File \"" : "Dir \"")
+                               + absolute(path).string() + "\" is not exist\n",
+                               AlertStates::Warning);
         return false;
     }
     return true;
@@ -236,7 +237,7 @@ void ConverterJSON::writeToJson(const QList<QString> &data, int listModelType) {
             break;
 
         default:
-            std::cerr << "Incorrect \"writingType\"" << std::endl;
+            AlertData::appendAlert("Incorrect \"writingType\"", AlertStates::Warning);
             return;
     }
 
