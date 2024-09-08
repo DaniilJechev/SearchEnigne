@@ -18,9 +18,15 @@ ApplicationWindow {
 
     property color windowColor: "#7d7d7d"
     property color standardTextColor: "white"
+    property int countOfNoResults: 0
 
     Component.onCompleted: {
         criticAlertHandler.checkOnAlerts()
+    }
+
+    onClosing: { // autosave paths and queries
+        ConverterJSON.writeToJson(queries.listModel.getAllData(), ListModelType.Queries);
+        ConverterJSON.writeToJson(paths.listModel.getAllData(), ListModelType.Paths);
     }
 
     Item {
@@ -91,7 +97,19 @@ ApplicationWindow {
             ConverterJSON.writeToJson(paths.listModel.getAllData(), ListModelType.Paths);
             searchHandler.search();
             answerList.clear();
-            answerList.append({"answer": ConverterJSON.getAnswers()});
+            var searchResults = ConverterJSON.getAnswers();
+            if (searchResults.length !== 0) {
+                countOfNoResults = 0;
+                answerList.append({"answer": searchResults});
+            } else {
+                countOfNoResults+=1;
+                if (countOfNoResults >= 10) {
+                    answerList.append({"answer": "You have found the paschal egg!!!"});
+                } else {
+                    answerList.append({"answer": "No results"});
+                }
+            }
+            alertView.positionViewAtIndex(alertList.rowCount() - 1, alertView.End);
         }
     }
 
@@ -277,11 +295,6 @@ ApplicationWindow {
         }
     }
 
-    onClosing: { // autosave paths and queries
-        ConverterJSON.writeToJson(queries.listModel.getAllData(), ListModelType.Queries);
-        ConverterJSON.writeToJson(paths.listModel.getAllData(), ListModelType.Paths);
-    }
-
     Item {
         id: answers
         width: parent.width / 2.5
@@ -342,10 +355,15 @@ ApplicationWindow {
                 width: 15
             }
 
+            function getRandomColor() {
+                return Qt.rgba(Math.random(), Math.random(), Math.random(), 1);
+            }
+
             delegate: Label { // answers
                 font.pointSize: 15
                 text: model.answer
-                color: "white"
+                color: (text === "You have found an Easter egg!!!" ) ?
+                           answerView.getRandomColor() : "white"
                 anchors {
                     left: parent !== null ? parent.left : undefined
                     top: parent !== null ? parent.top : undefined
@@ -353,6 +371,7 @@ ApplicationWindow {
                                     ((parent.width - width - answerVerticalSlider.width * 2)
                                      * answerView.leftAnchorMarginMultiplier) / 100 : 0
                 }
+
                 onContentSizeChanged: {
                     if (width < answerView.width) {
                         answerHorizontalSlider.policy = ScrollBar.AlwaysOff
@@ -440,7 +459,7 @@ ApplicationWindow {
             model: alertList
             height: parent.height - backGroundAlert.border.width * 4
             width: parent.width - backGroundAlert.border.width * 4
-            spacing: 10
+            spacing: 15
             clip: true
             anchors {
                 left: parent.left
@@ -457,20 +476,14 @@ ApplicationWindow {
                 width: 15
             }
 
-            delegate: RowLayout {
+            delegate: Text {
                 id: alert
-                spacing: 10
-
-                Label {
-                    height: 15
-                    font.pointSize: 15
-                    text: model.message
-                    color: colorDefinitions.getColor(model.status);
-                }
-            }
-
-            onCountChanged: {
-                alertView.positionViewAtIndex(alertList.rowCount() - 1, alertView.End);
+                height: implicitHeight
+                width: alertView.width * 0.9
+                font.pointSize: 15
+                text: model.message
+                color: colorDefinitions.getColor(model.status);
+                wrapMode: Text.WordWrap
             }
         }
     }

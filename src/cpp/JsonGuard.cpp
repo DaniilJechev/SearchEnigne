@@ -45,8 +45,6 @@ void checkConfig() {
     //check the "paths" field
     if (!data.contains("paths")) {
         throw std::runtime_error(R"(field "paths" in "config.json" is not exist)");
-    } else if (data["paths"].empty()) {
-        throw std::runtime_error(R"(field "paths" in "config.json" is empty)");
     } else if (!data.at("paths").is_array()) {
         throw std::runtime_error(R"(field "paths" in "config.json" must keep array elements)");
     }

@@ -13,7 +13,8 @@ std::vector<std::vector<RelativeIndex>> SearchServer::search(
     for (const auto &query: queriesInput) {
         std::string word;
         std::stringstream stream(query);
-        std::vector<RelativeIndex> docRelativeIdx; // add the path to file
+        std::vector<RelativeIndex> docRelativeIdx;
+
         while (stream >> word) {
             for (const auto &it: m_freqDict.GetWordCount(word)) {
                 SearchServer::addIndex(docRelativeIdx, it);

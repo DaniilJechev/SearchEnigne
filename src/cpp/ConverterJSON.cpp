@@ -61,7 +61,7 @@ bool ConverterJSON::isTxtOrDirectory(const fs::path &path) {
 
 bool ConverterJSON::pathGuard(fs::path &path, const fs::path &resourcesDir) {
     if (path.empty()) {
-        AlertData::appendAlert("One of your paths is empty or contain only special signs, like \"*\" \n",
+        AlertData::appendAlert("One of your paths is empty or contain only special signs, like \"*\"",
                                AlertStates::Warning);
         return false;
     }
@@ -69,13 +69,13 @@ bool ConverterJSON::pathGuard(fs::path &path, const fs::path &resourcesDir) {
         path = resourcesDir / path;
     }
     if (!ConverterJSON::isTxtOrDirectory(path)) {
-        AlertData::appendAlert("Path \"" + path.string() + " does not lead to a directory or \".txt\" file \n",
+        AlertData::appendAlert("Path \"" + path.string() + " does not lead to a directory or \".txt\" file",
                                AlertStates::Warning);
         return false;
     }
     if (!exists(path)) { //error
-        AlertData::appendAlert((is_regular_file(path) ? "File \"" : "Dir \"")
-                               + absolute(path).string() + "\" is not exist\n",
+        AlertData::appendAlert( "Path \""
+                               + absolute(path).string() + "\" is not exist",
                                AlertStates::Warning);
         return false;
     }
@@ -207,7 +207,13 @@ ConverterJSON::putAnswers(const std::vector<std::vector<RelativeIndex>> &relativ
         answerData[requestIdStr]["queryText"] = queries[requestId];
         ++requestId;
     }
-    answers << answerData.dump(4);
+
+    if (!answerData.empty()) {
+        answers << answerData.dump(4);
+    } else {
+        answers << "{}";
+    }
+
     answers.close();
 }
 
@@ -246,14 +252,16 @@ void ConverterJSON::writeToJson(const QList<QString> &data, int listModelType) {
     reading >> myData;
     reading.close();
 
-    myData.erase(jsonArrName);
+    myData.at(jsonArrName).clear();
     for (const auto &value : data) {
         if (value.isEmpty()) continue;
         myData[jsonArrName].push_back(value.toStdString());
     }
 
     std::ofstream writing (global::jsonDir / jsonFileName);
-    writing << myData.dump(4);
+    if (!myData.empty()) {
+        writing << myData.dump(4);
+    }
     writing.close();
 }
 

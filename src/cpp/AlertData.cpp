@@ -40,5 +40,5 @@ void AlertData::appendAlert(const std::string &message, int status) {
         emit alertData->endAppend();
         return;
     }
-    std::cerr << message;
+    std::cerr << message << std::endl;
 }
