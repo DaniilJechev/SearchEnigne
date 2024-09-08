@@ -65,7 +65,14 @@ If searching procces has been finished with no results, the `relevance` field wo
 ```
 
 ### Alert window
-- earlier
+![alert window](resources/readmeAssets/8.png)
+This window present the useful information for user:
+1. Indicators of start and end of process with appropriate time.
+2. Alerts which report to user about problems during the searching process.
+3. The result duration of searching process.
+
+And as a `Answer window` this is a _read-only_ window.
+
 ### Settings
 To get there, click on the gear icon in the upper right corner of application:\
 ![settings](resources/readmeAssets/7.png)
@@ -86,3 +93,7 @@ In `console` mode, program do only these steps and ultimately close:
 ### Editing json files 
 - For Inputting new paths to files, open the `config.json` file in `jsonFiles` directory and enter new paths into `paths` array. Feature with `*` from `Paths window` works the same way.
 - For inputting new queries , open the `requests.json` file in `jsonFiles` directory and enter new queries into the `requests` array.
+
+
+## Required Tools
+- **Qt**

@@ -1,6 +1,20 @@
 {
     "request000": {
-        "queryText": "hello",
+        "queryText": "the",
+        "relevance": {
+            "DocId_0": {
+                "pathToFile": "D:\\SearchEngineProject\\resources/file001.txt",
+                "rank": 0.5
+            },
+            "DocId_1": {
+                "pathToFile": "D:\\SearchEngineProject\\resources/file002.txt",
+                "rank": 1.0
+            }
+        },
+        "result": true
+    },
+    "request001": {
+        "queryText": "hello world",
         "relevance": {
             "DocId_2": {
                 "pathToFile": "D:/test\\test2\\test.txt",
@@ -9,9 +23,13 @@
         },
         "result": true
     },
-    "request001": {
-        "queryText": "to",
+    "request002": {
+        "queryText": "capital",
         "relevance": {
+            "DocId_0": {
+                "pathToFile": "D:\\SearchEngineProject\\resources/file001.txt",
+                "rank": 0.6666666865348816
+            },
             "DocId_1": {
                 "pathToFile": "D:\\SearchEngineProject\\resources/file002.txt",
                 "rank": 1.0

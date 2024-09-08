@@ -27,4 +27,4 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 enable_testing()
 
 add_subdirectory(src)
-#add_subdirectory(tests)
+add_subdirectory(tests)
