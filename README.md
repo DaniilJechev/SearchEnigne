@@ -96,4 +96,19 @@ In `console` mode, program do only these steps and ultimately close:
 
 
 ## Required Tools
-- **Qt**
+To set up and work on this project, you will need the following tools:
+
+1. **C++**
+   - **Standard**: 17 or higher
+   - **Purpose**: for `filesystem` and modern features 
+   - **Installation**: [Download and install C++](https://www.geeksforgeeks.org/complete-guide-to-install-c17-in-windows/)
+
+2. **CMake**
+   - **Version**: 3.14 or higher
+   - **Purpose**: Safe version to ensure compability with FetchContent, Qt6 and modern C++ standards. 
+   - **Installation**: [Donwload and install CMake](https://cmake.org/download/)
+
+3. Qt
+   - **Version**: 6.5 or higher 
+   - **Purpose**: for modern features
+   - **Installation**: [Donwload and install Qt](https://www.qt.io/download-dev)
