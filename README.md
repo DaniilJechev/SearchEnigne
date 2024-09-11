@@ -67,7 +67,7 @@ If searching procces has been finished with no results, the `relevance` field wo
 ### Alert window
 ![alert window](resources/readmeAssets/8.png)\
 This window presents useful information for users:
-1. Indicators of start and end of process with appropriate time.
+1. Indicators of start and end of the process with appropriate time.
 2. Alerts which report to user about problems during the searching process.
 3. The result duration of searching process.
 
