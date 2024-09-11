@@ -14,7 +14,7 @@ But for switching Search engine to the application mode, you should go to `confi
 ![](resources/readmeAssets/1.png)
 Advantages of `applciation` mode: 
 - User-friendly and intuitive interface
-- Allow user to input queries and paths without interaction with `.json` files
+- Allows user to input queries and paths without interaction with `.json` files
 
 ### Queries window
 ![queriesWindow](resources/readmeAssets/3.png)
