@@ -13,6 +13,7 @@ But for switching Search engine to the application mode, you should go to `confi
 **Appearance** of `application` mode:
 ![](resources/readmeAssets/1.png)
 Advantages of `applciation` mode: 
+
 - User-friendly and intuitive interface
 - Allows user to input queries and paths without interaction with `.json` files
 
@@ -69,7 +70,7 @@ If searching procces has been finished with no results, the `relevance` field wo
 This window presents useful information for users:
 1. Indicators of start and end of the process with appropriate time.
 2. Alerts which report to user about problems during the searching process.
-3. The result duration of searching process.
+3. The result duration of the searching process.
 
 And as a `Answer window` this is a _read-only_ window.
 
