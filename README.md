@@ -1,5 +1,5 @@
 # SearchEngine
-This search engine read input queries and paths and creates a table with relevance index for each file in path.\
+This search engine reads input queries and paths and creates a table with relevance index for each file in path.\
 Relevance index is value which show to the user the probability of successful finding of the request
 \
 \
