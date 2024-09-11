@@ -1,6 +1,6 @@
 # SearchEngine
 This search engine reads input queries and paths and creates a table with relevance index for each file in paths window.\
-Relevance index is value which show to the user the probability of successful finding of the request
+Relevance index is value which shows the probability of successful finding of the request to the user.
 \
 \
 Search engine has a 2 run modes:
