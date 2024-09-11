@@ -12,7 +12,7 @@ But for switching Search engine to the application mode, you should go to `confi
 \
 **Appearance** of `application` mode:
 ![](resources/readmeAssets/1.png)
-Adventages of `applciation` mode: 
+Advantages of `applciation` mode: 
 - User-friendly and intuitive interface
 - Allow user to input queries and paths without interaction with `.json` files
 
