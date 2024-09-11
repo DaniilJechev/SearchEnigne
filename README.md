@@ -33,7 +33,7 @@ Advantages of `applciation` mode:
 	- If `*` isn't added to the end of directory path, program will check content only in pointed directory, without entering to subdirectories.
 
 Also, **user can create a relative paths to files**, if they place in project directory `resources`.\
-For example, `file001.txt` and `file002.txt` initially place in `resource` directory, consequently, user can piont relative path to them.
+For example, `file001.txt` and `file002.txt` initially place in `resource` directory, consequently, user can point relative path to them.
 
 ### Answers window
 ![answer window](resources/readmeAssets/5.png)\
