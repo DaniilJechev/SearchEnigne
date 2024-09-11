@@ -37,10 +37,10 @@ For example, `file001.txt` and `file002.txt` initially place in `resource` direc
 
 ### Answers window
 ![answer window](resources/readmeAssets/5.png)\
-That's a _read-only_ window, with no opportunity to edit. But has horizontal and vertical slider for navigation.\
+That's a _read-only_ window, with no opportunity to edit. But has horizontal and vertical slider for navigation.
 
 #### json Structure
-If searching was successful user can see the list of answers to requests with this structure:
+If searching was successful, user can see the list of answers to requests with this structure:
 ```json
 "request<ID>": {
     "queryText": "someText",
