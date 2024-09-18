@@ -3,12 +3,11 @@
         "max_responses": 5,
         "name": "SearchEngine",
         "runMode": "application",
-        "version": "0.1"
+        "version": "1"
     },
     "paths": [
         "file001.txt",
         "file002.txt",
-        "D:/test*",
-        "nonExistPath"
+        "D:/test*"
     ]
 }

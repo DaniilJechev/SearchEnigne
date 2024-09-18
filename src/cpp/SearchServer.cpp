@@ -1,11 +1,14 @@
 #include "SearchServer.h"
 #include "InvertedIndex.h"
 
+#include <cmath>
+
 #include <vector>
 #include <string>
 #include <sstream>
 #include <utility>
 #include <algorithm>
+
 
 std::vector<std::vector<RelativeIndex>> SearchServer::search(
         const std::vector<std::string> &queriesInput, size_t maxResponses) {
@@ -52,8 +55,8 @@ void SearchServer::addIndex(std::vector<RelativeIndex> &docRelativeIdx, const En
 
 void SearchServer::convertAbsToRelative(std::vector<RelativeIndex> &docRelativeIdx) { //array must be sorted
     if (docRelativeIdx.empty()) return;
-    float maxIdx = docRelativeIdx[0].m_rank;
+    float maxRank = docRelativeIdx[0].m_rank;
     for (auto &it: docRelativeIdx) {
-        it.m_rank /= maxIdx;
+        it.m_rank /= maxRank;
     }
 }
