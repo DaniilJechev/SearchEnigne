@@ -1,6 +1,6 @@
 # SearchEngine
-This search engine read input queries and paths and creates a table with relevance index for each file in path.\
-Relevance index is value which show to the user the probability of successful finding of the request
+This search engine reads input queries and paths and creates a table with relevance index for each file in paths window.\
+Relevance index is value which shows the probability of successful finding of the request to the user.
 \
 \
 Search engine has a 2 run modes:
@@ -12,9 +12,10 @@ But for switching Search engine to the application mode, you should go to `confi
 \
 **Appearance** of `application` mode:
 ![](resources/readmeAssets/1.png)
-Adventages of `applciation` mode: 
+Advantages of `applciation` mode: 
+
 - User-friendly and intuitive interface
-- Allow user to input queries and paths without interaction with `.json` files
+- Allows user to input queries and paths without interaction with `.json` files
 
 ### Queries window
 ![queriesWindow](resources/readmeAssets/3.png)
@@ -33,14 +34,14 @@ Adventages of `applciation` mode:
 	- If `*` isn't added to the end of directory path, program will check content only in pointed directory, without entering to subdirectories.
 
 Also, **user can create a relative paths to files**, if they place in project directory `resources`.\
-For example, `file001.txt` and `file002.txt` initially place in `resource` directory, consequently, user can piont relative path to them.
+For example, `file001.txt` and `file002.txt` initially place in `resource` directory, consequently, user can point relative path to them.
 
 ### Answers window
 ![answer window](resources/readmeAssets/5.png)\
-That's a _read-only_ window, with no opportunity to edit. But has horizontal and vertical slider for navigation.\
+That's a _read-only_ window, with no opportunity to edit. But has horizontal and vertical slider for navigation.
 
 #### json Structure
-If searching was successful user can see the list of answers to requests with this structure:
+If searching was successful, user can see the list of answers to requests with this structure:
 ```json
 "request<ID>": {
     "queryText": "someText",
@@ -65,11 +66,11 @@ If searching procces has been finished with no results, the `relevance` field wo
 ```
 
 ### Alert window
-![alert window](resources/readmeAssets/8.png)
-This window present the useful information for user:
-1. Indicators of start and end of process with appropriate time.
+![alert window](resources/readmeAssets/8.png)\
+This window presents useful information for users:
+1. Indicators of start and end of the process with appropriate time.
 2. Alerts which report to user about problems during the searching process.
-3. The result duration of searching process.
+3. The result duration of the searching process.
 
 And as a `Answer window` this is a _read-only_ window.
 
