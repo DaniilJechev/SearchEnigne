@@ -25,6 +25,7 @@ public:
     [[nodiscard]] QHash<int, QByteArray> roleNames() const override;
 
     Q_INVOKABLE void append(const QString& message, int status);
+    Q_INVOKABLE void clear();
 
 public slots:
     void beginInsertRowsSlot(int first, int last, const QModelIndex& parent);

@@ -151,7 +151,6 @@ Item {
             leftMargin: 5
         }
         onClickedFoo: {
-            if (m_listModel.rowCount() === 0) return;
             m_listModel.remove(0, m_listModel.rowCount());
         }
     }

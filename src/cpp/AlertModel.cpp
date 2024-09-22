@@ -65,6 +65,12 @@ void AlertModel::append(const QString& message, int status) {
     endInsertRows();
 }
 
+void AlertModel::clear() {
+    beginResetModel();
+    m_data.clear();
+    endResetModel();
+}
+
 void AlertModel::beginInsertRowsSlot(int first, int last, const QModelIndex &parent) {
     beginInsertRows(parent, first, last);
 }

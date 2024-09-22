@@ -33,6 +33,7 @@ public:
     static AlertData* getInstance();
     static void raiseModelExists();
     static void appendAlert(const std::string &message, int status = AlertStates::Safely);
+    static void clear();
 
 signals:
     void startAppend(int first, int second, const QModelIndex& parent);

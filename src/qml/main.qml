@@ -486,5 +486,21 @@ ApplicationWindow {
                 wrapMode: Text.WordWrap
             }
         }
+
+        MyButton {
+            id: clearButton
+            width: 70
+            height: 30
+            buttonText: "clear"
+            fontPointSize: 14
+            anchors {
+                top: backGroundAlert.bottom
+                left: backGroundAlert.left
+                topMargin: 5
+            }
+            onClickedFoo: {
+                alertList.clear();
+            }
+        }
     }
 }

@@ -42,3 +42,7 @@ void AlertData::appendAlert(const std::string &message, int status) {
     }
     std::cerr << message << std::endl;
 }
+
+void AlertData::clear() {
+    AlertData::getInstance()->m_data.clear();
+}
